@@ -1,0 +1,16 @@
+{
+    "name": "softinline/jtable",
+    "description": "table creation from json file",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dani",
+            "email": "daniel@softinline.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.1"
+    }
+}

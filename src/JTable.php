@@ -11,6 +11,7 @@
          * return generated
          * html string
          * for table using a view
+         * @return string
          */
         public function table($config, $list) {
                         

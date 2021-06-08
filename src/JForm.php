@@ -22,6 +22,7 @@
 
         /**
          * sets the controller
+         * @return void
          */
         public function setController($controller) {
 
@@ -41,6 +42,7 @@
 
         /**
          * sets the item
+         * @return void
          */
         public function setItem($item) {
 
@@ -52,6 +54,9 @@
          * return generated
          * html string
          * for form using a view
+         * @param array $config with the array of config
+         * @param string $form, string name of the form
+         * @return string
          */
         public function form($config, $form) {
                                                 
@@ -69,6 +74,7 @@
          * execute validations
          * process the form, 
          * and return the response
+         * @return operation
          */
         public function submit($config, $form, $method=null, $tab=null, $id=null) {
 

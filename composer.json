@@ -16,7 +16,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Softinline\\Jcrud\\": "src/"
+            "Softinline\\JCrud\\": "src/"
         }
     }
 }

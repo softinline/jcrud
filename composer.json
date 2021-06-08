@@ -1,6 +1,6 @@
 {
-    "name": "softinline/jtable",
-    "description": "table creation from json file",
+    "name": "softinline/jcrud",
+    "description": "crud methods for datatables, edit, add actions",
     "type": "library",
     "license": "MIT",
     "authors": [

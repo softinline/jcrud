@@ -3,8 +3,7 @@
     "description":"crud methods for datatables, edit, add actions using json file for defines",
     "keywords" : ["laravel","crud","form","add","datatable","datatables","json"],
     "type":"library",
-    "license":"MIT",
-    "version":"1.0.1.0",
+    "license":"MIT",    
     "authors":[
         {
             "name":"Dani",

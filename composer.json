@@ -1,16 +1,17 @@
 {
-    "name": "softinline/jcrud",
-    "description": "crud methods for datatables, edit, add actions",
-    "type": "library",
-    "license": "MIT",
-    "authors": [
+    "name":"softinline/jcrud",
+    "description":"crud methods for datatables, edit, add actions",
+    "type":"library",
+    "license":"MIT",
+    "version":"1.0.0",
+    "authors":[
         {
-            "name": "Dani",
-            "email": "daniel@softinline.com"
+            "name":"Dani",
+            "email":"daniel@softinline.com"
         }
     ],
-    "minimum-stability": "dev",
-    "require": {
-        "php": ">=7.1"
+    "minimum-stability":"dev",
+    "require":{
+        "php":">=7.1"
     }
 }

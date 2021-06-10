@@ -1,6 +1,11 @@
 <?php   
     // wrapper extends
-    $wrapper = !$form['wrapper'] ? 'jcrud.form_wrapper' : $form['wrapper'];
+    $wrapper = !$form['wrapper'] ? 'softinline::jform_wrapper' : $form['wrapper'];
+
+    $query = http_build_query(\Request::all());
+    if($query != '') {
+        $query = '?'.$query;
+    }
 
     // check if use ajax
     $ajax = @$config['ajax'] ? '#' : '';
@@ -29,12 +34,12 @@
                         <?php if($tab['type'] == 'form') { ?>
                             <?php
                                 // default values
-                                $frmAction = @$item ? '/'.$config['entity'].'/'.$item->id.'/update' : '/'.$config['entity'].'/create';
+                                $frmAction = @$item ? '/'.$config['url'].'/'.$item->id.'/update' : '/'.$config['url'].'/create';
                                 $frmName = 'frm-'.$config['title'].'-'.$tab['key'];
 
                                 // if has action
                                 if(array_key_exists('action', $form)) {
-                                    $frmAction = $item ? '/'.$config['entity'].'/'.$item->id.'/'.$form['action'] : '/'.$config['entity'].'/'.$form['action'];
+                                    $frmAction = $item ? '/'.$config['url'].'/'.$item->id.'/'.$form['action'] : '/'.$config['url'].'/'.$form['action'];
                                     $frmName = 'frm-'.$config['title'].'-'.$tab['key'];
                                 }
 
@@ -74,10 +79,10 @@
                                         <?php foreach($tab['extraButtons'] as $extraButton) { ?>
                                             <button type="button" class="btn btn-primary btn-sm" onclick="{{ $extraButton[1] }}('{{ @$item->id }}')"> {{ ucfirst(trans('messages.'.$extraButton[0])) }}</button>
                                         <?php } ?>
-                                        <a href="{{ url($ajax.$config['entity']) }}" class="btn btn-secondary btn-sm"> {{ ucfirst(trans('messages.cancel')) }}</a>
+                                        <a href="{{ url($ajax.$config['url'].$query) }}" class="btn btn-secondary btn-sm"> {{ ucfirst(trans('messages.cancel')) }}</a>
                                     </div>
                                 </div>
-                                <input type="hidden" name="tab" id="tab" value="{{ $tab['key'] }}" />
+                                <input type="hidden" name="tab" id="tab" value="{{ $tab['key'] }}" />                                
                             </form>
                         <!-- view -->
                         <?php } elseif($tab['type'] == 'view') { ?>                            

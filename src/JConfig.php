@@ -31,6 +31,24 @@
         }
 
         /**
+         * return the url
+         */
+        public function getUrl($id=null) {
+
+            return str_replace('{id}', $id, $this->_config['url']);
+
+        }
+
+        /**
+         * return the confir list
+         */
+        public function getListName($list) {
+
+            return $this->_config['lists'][$list]['name'];
+
+        }
+
+        /**
          * load config file
          * and config definition
          * @return bool;

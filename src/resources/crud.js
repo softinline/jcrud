@@ -1,12 +1,22 @@
 crud = {
     tables: Array(),
+    init:function() {
+        // capture delete click event on row
+        $(document).on('click', '.delete',  function() {
+            crud.delete($(this));
+        });            
+        // capture select all
+        $(document).on('click', '.select-all-btn',  function() {            
+            crud.selectAll($(this));
+        });  
+    },
     formRequireds: function(frm) {                
         var elements = document.forms[frm].elements;
         for (i=0; i<elements.length; i++){        
             if(elements[i].classList.contains("frm-item-required")) {                
                 if(elements[i].value == '') {                    
-                    alerts.show('ko', $("#"+elements[i].name).prev('label').html() + ' is required');
-                    $("#"+elements[i].name).addClass('required');                        
+                    alerts.show('ko', $("#"+elements[i].name).prev('label').html() + ' ' + i18n.t('is required'));
+                    $("#"+elements[i].name).addClass('required');
                     return false;
                 }
             }
@@ -17,7 +27,7 @@ crud = {
         var entity = $(obj).attr('data-entity');
         var datatable = $(obj).attr('data-datatable');        
         if(crud.tables[datatable].selected.length > 0) {
-            var bConfirm = confirm('Are you sure you want to export '+crud.tables[datatable].selected.length+' elements?');
+            var bConfirm = confirm(i18n.t('are you sure of export') + ' ' + crud.tables[datatable].selected.length+' '+i18n.t('elements'));
             if(bConfirm) {
                 $.ajax({
                     method: "post",
@@ -36,13 +46,16 @@ crud = {
                         }
                     },
                     error: function (xhr, ajaxOptions, thrownError) { 
-                        alerts.show('ko', 'Ha ocurrido un problema');
+                        alerts.show('ko', i18n.t('there was a problem'));
                     },
                     complete: function() {
-                        alerts.show('ok', 'export completed');                        
+                        alerts.show('ok', i18n.t('export completed'));
                     }            
                 });
             }
+        }
+        else {
+            alerts.show('ko', i18n.t('nothing to export'));
         }
     },
     selectAll: function(obj) {
@@ -52,7 +65,7 @@ crud = {
             crud.tables[datatable].selected = Array();
             crud.tables[datatable].datatable.ajax.reload(null, false);
         }
-        else {
+        else {            
             $.ajax({
                 method: "post",
                 url: "/"+entity+"/select-all",
@@ -67,7 +80,7 @@ crud = {
                 },
                 error: function (xhr, ajaxOptions, thrownError) { 
                     $(".wrapper").LoadingOverlay('hide');
-                    alerts.show('ko', 'Ha ocurrido un problema');
+                    alerts.show('ko', i18n.t('there was a problem'));
                 },
                 complete: function() {
                     $(".wrapper").LoadingOverlay('hide');
@@ -79,7 +92,7 @@ crud = {
     toggleEnable: function(obj) {        
         var id = obj.attr('data-id');
         var entity = obj.attr('data-entity');
-        var datatable = obj.attr('data-datatable');        
+        var datatable = obj.attr('data-datatable');
         $("body").LoadingOverlay('show');
         $.ajax({
             method: "post",
@@ -93,11 +106,11 @@ crud = {
                 }
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                $("body").LoadingOverlay('hide');
-                crud.tables[datatable].datatable.ajax.reload(null, false);
+                $("body").LoadingOverlay('hide');                
             },
             complete: function() {
                 $("body").LoadingOverlay('hide');                
+                crud.tables[datatable].datatable.ajax.reload(null, false);
             }
         });
     },
@@ -105,7 +118,7 @@ crud = {
         var id = obj.attr('data-id');
         var entity = obj.attr('data-entity');
         var datatable = obj.attr('data-datatable');
-        var bConfirm = confirm('¿are you sure delete from ['+entity+'] #'+id+'?');
+        var bConfirm = confirm(i18n.t('are you sure to delete') + ' ['+entity+'] #'+id+'?');
         if(bConfirm) {
             $("body").LoadingOverlay('show');
             $.ajax({

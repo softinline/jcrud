@@ -1,6 +1,6 @@
 <?php   
     // wrapper extends
-    $wrapper = !$list['wrapper'] ? 'jcrud.list_wrapper' : $list['wrapper'];
+    $wrapper = !$list['wrapper'] ? 'softinline::jtable_wrapper' : $list['wrapper'];
     $query = http_build_query(\Request::all());
     if($query != '') {
         $query = '?'.$query;
@@ -24,13 +24,13 @@
                         <div class="dropdown-menu dropdown-menu-right" role="menu" x-placement="bottom-start">
                             <?php foreach($list['options'] as $listOption) { ?>
                                 <?php 
-                                    // prepare acttion link
-                                    $tmp = explode(':', $listOption[2]);                                                     
+                                    // prepare action link
+                                    $tmp = explode(':', $listOption[2]);
                                 ?>
                                 <?php if($tmp[0] == 'js') { ?>
-                                    <a href="javascript:void(0)" class="dropdown-item" onclick="{{ $tmp[1] }}(this)" data-entity="{{ $config['entity'] }}" data-datatable="{{ $list['name'] }}" data-id="{{ $id }}"><i class="{{ $listOption[1] }}"></i> {{ ucfirst(trans('messages.'.$listOption[0])) }}</a>
+                                    <a href="javascript:void(0)" class="dropdown-item" onclick="{{ $tmp[1] }}(this)" data-entity="{{ $config['entity'] }}" data-datatable="{{ $list['name'] }}" data-id="{{ @$id }}"><i class="{{ $listOption[1] }}"></i> {{ ucfirst(trans('messages.'.$listOption[0])) }}</a>
                                 <?php } else { ?>
-                                    <?php $tmp[1] = str_replace('{id}', $id, $tmp[1]); ?>
+                                    <?php $tmp[1] = str_replace('{id}', @$id, $tmp[1]); ?>
                                     <a href="javascript:void(0)" class="dropdown-item" onclick="window.open('{{ url($tmp[1]) }}','_self')"><i class="{{ $listOption[1] }}"></i> {{ ucfirst(trans('messages.'.$listOption[0])) }}</a>
                                 <?php } ?>
                             <?php } ?>
@@ -44,12 +44,12 @@
                 <?php } ?>
             <?php } ?>
             <?php if($list['actions']['export']) { ?>
-                <a href="{{ url($ajax.$config['entity'].'/export') }}" class="btn btn-primary btn-sm">
+                <a href="javascript:void(0)" class="btn btn-primary btn-sm" onclick="crud.export(this)" data-entity="{{ $config['entity'] }}" data-datatable="{{ $list['name'] }}">
                     <i class="fa fa-file"></i> {{ ucfirst(trans('messages.export')) }}
                 </a>
             <?php } ?>
             <?php if($list['actions']['add']) { ?>
-                <a href="{{ url($ajax.$config['entity'].'/add'.$query) }}" class="btn btn-primary btn-sm">
+                <a href="{{ url($ajax.$config['url'].'/add'.$query) }}" class="btn btn-primary btn-sm">
                     <i class="fa fa-plus-circle"></i> {{ ucfirst(trans('messages.add')) }}
                 </a>
             <?php } ?>
@@ -88,7 +88,7 @@
             }
         
             <?php                
-                $data = url($config['entity'].'/data'.$query);
+                $data = url($config['url'].'/data'.$query);
                 if(array_key_exists('data', $list)) {
                     $data = str_replace('{id}', $id, $list['data'].$query);
                 }
@@ -99,7 +99,7 @@
                 "processing": true,
                 "serverSide": true,
                 "responsive": true,
-                "ajax": "{{ $data }}",
+                "ajax": "<?php echo $data; ?>",
                 "columns": [
                     <?php if($list['actions']['selector']) { ?>
                             { data:"selector", name:"selector", orderable:false, searchable:false },
@@ -141,15 +141,11 @@
             });        
             
             <?php if($list['actions']['selector']) { ?>
-
-                $("#chk-select-all").on('click', function() {
-                    $('.selector').click();
-                })
-
+                                
                 // selector / unselector change class and add to array
                 $(document).on('click', '.selector', function () {
                     var id = this.id;
-                    var index = $.inArray(id, crud.tables["{{ $list['name'] }}"].selected); 
+                    var index = $.inArray(id, crud.tables["{{ $list['name'] }}"].selected);
                     if ( index === -1 ) {
                         crud.tables["{{ $list['name'] }}"].selected.push(id);
                     } 

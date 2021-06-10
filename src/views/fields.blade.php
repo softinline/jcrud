@@ -179,7 +179,7 @@
         ?>
         <div id="div-{{ $field['field'] }}" style="display:{{ $display }}">
             <?php foreach($field['childrens']['fields'] as $fieldChildren) { ?>                
-                @include('crud.fields', [
+                @include('softinline::fields', [
                     'field' => $fieldChildren
                 ])
             <?php } ?>

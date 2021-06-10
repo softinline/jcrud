@@ -32,6 +32,7 @@
 
         /**
          * return the url
+         * @return string
          */
         public function getUrl($id=null) {
 

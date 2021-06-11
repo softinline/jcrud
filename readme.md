@@ -183,6 +183,7 @@ if you want use rows and cols based on bootstrap you can use a special type fiel
             "title":"field2",
             "field":"field2"
         },
+    ]
 }
 ```
 

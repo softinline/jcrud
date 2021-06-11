@@ -7,6 +7,15 @@
 Softinline jCrud is a package designed for help in crud datatable and forms generation, 
 you can define in json files directly linked with controller / models, adding support for export, select rows, adding more buttons, all using the same style.
 
+## Components
+
+Softinline jCrud is a set of some components:
+- jConfig (load files of config) and offers methods for get/set some configs in realtime access
+- jTable (from json define file, can show diferent datatables, setting cols, orderable, searchable, etc...), one define file can store multiple lists under the tag list with diferents names, by default
+we are using 'index' list
+- jForm, this class offers functionality about preapre form with diferent tabs, rows, and multiple input types (text, number, datetime, email, password, editor, custom, view, etc...)
+- crud.js (this js store information about datatables created, select rows, validation function before submit forms, etc...)
+
 ## Some samples
 
 You can define your files in app/Defines (ex), in your controller you can use jConfig class to load your defines files like this

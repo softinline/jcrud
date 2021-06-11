@@ -334,6 +334,26 @@
         }
 
         /**
+         * process form
+         */
+        public function process($config, $form, $tab, $item) {
+            foreach($config['forms'][$form]['tabs'][$tab]['fields'] as $field) {
+                if(\Request::has($field['field'])) {
+                    if($field['type'] == 'text' || $field['type'] == 'textarea' || $field['type'] == 'editor' || $field['type'] == 'number') {
+                        $item->{$field['field']} = \Request::get($field['field']) != '' ? \Request::get($field['field']) : null;
+                    }
+                    if($field['type'] == 'checkbox') {                        
+                        $item->{$field['field']} = \Request::get($field['field']) == 1 ? 1 : 0;
+                    }
+                }
+            }
+            if($item->save()) {
+                return true;
+            }
+            return false;
+        }
+
+        /**
          * encapsulate export method
          * using Spreadsheet package
          * @return string with data

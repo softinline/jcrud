@@ -16,6 +16,30 @@ we are using 'index' list
 - jForm, this class offers functionality about preapre form with diferent tabs, rows, and multiple input types (text, number, datetime, email, password, editor, custom, view, etc...)
 - crud.js (this js store information about datatables created, select rows, validation function before submit forms, etc...)
 
+## jForm field types
+```
+- custom -> call method in controller parent to show some div or HTML code
+- file
+- date
+- datetime
+- text
+- number
+- password
+- email
+- button -> execute the 'action' key on json defines (normally javascript onclick event)
+- checkbox
+- textarea
+- editor -> replaced with ckeditor needed the plugin installed and initialized
+- select -> call controller method defined in 'selector' key on json defines see samples
+- select-multiple -> call controller allow multiple selection, controller must return array with 'all' and 'selected' elements
+- checkbox-multiple -> same as select-multiple but in checkbox format
+- json -> displays information in json field (array) using <pre>
+- view -> call view and load, view receives the $config, $item, etc vars with information (see documentation)
+
+*** 
+- childrens -> if field element has a children method, the fields inside can be displayed using a validation method that returns true or not, for example if you want to display more fields depends on select response.
+```
+
 ## Some samples
 
 You can define your files in app/Defines (ex), in your controller you can use jConfig class to load your defines files like this

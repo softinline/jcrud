@@ -24,7 +24,7 @@ public function __construct() {
 }
 ```
 
-
+```json
 This is a simple basic sample define for table users:
                                 
 {
@@ -163,10 +163,12 @@ This is a simple basic sample define for table users:
         }
     }
 }
+```
 
 if you want use rows and cols based on bootstrap you can use a special type field 'row' like this, each you can have n fields of the every type (text, password, editor, date, etc...)
 
- {
+```json
+{
     "type":"row",
     "fields":[
         {
@@ -182,6 +184,7 @@ if you want use rows and cols based on bootstrap you can use a special type fiel
             "field":"field2"
         },
 }
+```
 
 ## License
 

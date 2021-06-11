@@ -11,6 +11,7 @@ you can define in json files directly linked with controller / models, adding su
 
 You can define your files in app/Defines (ex), in your controller you can use jConfig class to load your defines files like this
 
+```php
 var $_jconfig;
 
 /**
@@ -21,6 +22,7 @@ public function __construct() {
     $this->_jconfig = new \Softinline\JCrud\JConfig();
     $this->_jconfig->load(app_path().'/Defines/admin-users.json', 'admin-users');
 }
+```
 
 
 This is a simple basic sample define for table users:

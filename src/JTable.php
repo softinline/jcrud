@@ -9,6 +9,7 @@
         
         private $_id;
 
+
         /**
          * constructor
          * @param $id, is the base id for all requests
@@ -28,7 +29,7 @@
 
             // replace dynamic {id} with id
             $config['url'] = str_replace('{id}', $this->_id, $config['url']);
-
+            
             // url parent if has in config
             if(array_key_exists('url_parent', $config)) {
                 $config['url_parent'] = str_replace('{id}', $this->_id, $config['url_parent']);

@@ -49,6 +49,26 @@
 
         }
 
+                /**
+         * return the item
+         * @return string
+         */
+        public function getLayout() {
+
+            return $this->_layout;
+
+        }
+
+        /**
+         * sets the item
+         * @return void
+         */
+        public function setLayout($layout) {
+
+            $this->_layout = $layout;
+
+        }
+
         /**
          * load config file
          * and config definition

@@ -10,7 +10,7 @@
         private $_controller;
         private $_item;
         private $_id;
-
+        
         /**
          * constructor
          * @param $id, is the base id for all requests
@@ -60,7 +60,7 @@
             $this->_item = $item;
 
         }
-        
+                
         /**
          * return generated
          * html string
@@ -73,7 +73,7 @@
 
             // replace dynamic {id} with id
             $config['url'] = str_replace('{id}', $this->_id, $config['url']);
-                                                
+                                                            
             // return view
             return View('softinline::jform', [
                 'config' => $config,
@@ -223,27 +223,48 @@
          * rules
          */
         private function validate($config, $form, $tab) {
+
             $validatorRules = [];
+
             if($config['forms'][$form]['tabs'][$tab]["type"] == 'form') {
+
                 foreach($config['forms'][$form]['tabs'][$tab]['fields'] as $field) {
+
                     if($field['type'] != 'view') {
+
                         if($field['type'] == 'row') {
+
                             foreach($field['fields'] as $subfield) { 
+
                                 if($subfield['required'] === 'true' || $subfield['required'] === true ) {
+
                                     $validatorRules[$subfield['field']] = 'required';
+
                                 }    
+
                             }
+
                         }
+
                         else {
+
                             if($field['required'] === 'true' || $field['required'] === true ) {
+
                                 $validatorRules[$field['field']] = 'required';
+
                             }
+
                         }
+
                     }
+
                 }
+
             }             
+
             // make validator
             $validator = \Validator::make(\Request::all(), $validatorRules);
+
             return $validator;
         }
 
@@ -251,98 +272,138 @@
          * delete the item
          */
         public function delete($config, $method) {
+
             // ajax request
             $ajax = '';
             if(array_key_exists('ajax', $config)) {
                 $ajax = $config['ajax'] ? '#' : '';
             }
+
             // replace dynamic {id} with id
             $config['url'] = $ajax.str_replace('{id}', $this->_id, $config['url']);
+
             // if has item
             if($this->_item) {
+
                 try {
+
                     // call to method
                     $result = $this->_controller::$method($this->_item);
+
                     if($result) {
+
                         \DB::commit();
+
                         if(\Request::ajax()) {
+
                             return \Response::json([
                                 'success' => true,
                                 'message' => ucfirst(trans('messages.deleted_ok')),
                                 'type' => 'redirect',
                                 'redirect' => $config['url'],
                             ], 200);
+
                         }
                         else {
+
                             \Session::flash('flash_message', ucfirst(trans('messages.deleted_ok')));
+
                             return \Redirect::to($config['url']);
+
                         }
                     }
                     else {
                         if(\Request::ajax()) {
+
                             return \Response::json([
                                 'success' => false,
                                 'message' => ucfirst(trans('messages.deleted_error')),
                             ], 200);
+
                         }
                         else {
+
                             return \Redirect::to($config['url'])
                                 ->withInput()
                                 ->with('message', ucfirst(trans('messages.deleted_error')));
+
                         }
                     }
                 }
                 // catch error
                 catch(\Exception $e) {
+
                     \DB::rollback();
+
                     \Log::error('Error Message '.$e->getMessage());
                     \Log::error('Error Trace '.$e->getTraceAsString());
+
                     if(\Request::ajax()) {
+
                         return \Response::json([
                             'success' => false,
                             'message' => ucfirst(trans('messages.deleted_error')),
                         ], 200);
+
                     }
                     else {
+
                         return \Redirect::to($redirectKo)
                             ->withInput()
                             ->with('message', ucfirst(trans('messages.deleted_error')));
                     }
+
                 }
+
             }
             // no item found
             else {
+
                 if(\Request::ajax()) {
+
                     return \Response::json([
                         'success' => false,
                         'message' => ucfirst(trans('messages.item_not_found')),
                     ], 200);
+
                 }
                 else {
+
                     return \Redirect::to($config['url'])
                         ->withInput()
                         ->with('message', ucfirst(trans('messages.item_not_found')));
+
                 }
+
             }
+
         }
 
         /**
          * process form
          */
         public function process($config, $form, $tab, $item) {
+
             foreach($config['forms'][$form]['tabs'][$tab]['fields'] as $field) {
+
                 if(\Request::has($field['field'])) {
+
                     if($field['type'] == 'text' || $field['type'] == 'textarea' || $field['type'] == 'editor' || $field['type'] == 'number') {
                         $item->{$field['field']} = \Request::get($field['field']) != '' ? \Request::get($field['field']) : null;
                     }
+
                     if($field['type'] == 'checkbox') {                        
                         $item->{$field['field']} = \Request::get($field['field']) == 1 ? 1 : 0;
                     }
+
                 }
+
             }
+
             if($item->save()) {
                 return true;
             }
+
             return false;
         }
 

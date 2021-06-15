@@ -49,13 +49,13 @@
 
         }
 
-                /**
+        /**
          * return the item
          * @return string
          */
         public function getLayout() {
 
-            return $this->_layout;
+            return $this->_config['layout'];
 
         }
 
@@ -65,7 +65,7 @@
          */
         public function setLayout($layout) {
 
-            $this->_layout = $layout;
+            $this->_config['layout'] = $layout;            
 
         }
 

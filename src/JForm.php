@@ -95,6 +95,9 @@
             // replace dynamic {id} with id
             $config['url'] = str_replace('{id}', $this->_id, $config['url']);
 
+            // ajax
+            $config['url'] = ($config['ajax'] ? '#' : '').$config['url'];
+
             $item = null;
             if(!is_null($id)) {
                 $model = \App::make('\\App\\Models\\'.$config['model']);

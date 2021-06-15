@@ -248,85 +248,82 @@
         }
 
         /**
-         * delete the item id
+         * delete the item
          */
         public function delete($config, $method) {
-
             // ajax request
             $ajax = '';
             if(array_key_exists('ajax', $config)) {
                 $ajax = $config['ajax'] ? '#' : '';
             }
-
             // replace dynamic {id} with id
             $config['url'] = $ajax.str_replace('{id}', $this->_id, $config['url']);
-                                                
+            // if has item
             if($this->_item) {
-                
-                $result = $this->_controller::$method($this->_item);
-
-                // attempt to delete
-                if($result) {
-
-                    if(\Request::ajax()) {
-
-                        return \Response::json([
-                            'success' => true,
-                            'message' => ucfirst(trans('messages.deleted_ok')),
-                            'type' => 'redirect',
-                            'redirect' => $config['url'],
-                        ], 200);
-
+                try {
+                    // call to method
+                    $result = $this->_controller::$method($this->_item);
+                    if($result) {
+                        \DB::commit();
+                        if(\Request::ajax()) {
+                            return \Response::json([
+                                'success' => true,
+                                'message' => ucfirst(trans('messages.deleted_ok')),
+                                'type' => 'redirect',
+                                'redirect' => $config['url'],
+                            ], 200);
+                        }
+                        else {
+                            \Session::flash('flash_message', ucfirst(trans('messages.deleted_ok')));
+                            return \Redirect::to($config['url']);
+                        }
                     }
                     else {
-
-                        \Session::flash('flash_message', ucfirst(trans('messages.deleted_ok')));
-                        return \Redirect::to($config['url']);
-
+                        if(\Request::ajax()) {
+                            return \Response::json([
+                                'success' => false,
+                                'message' => ucfirst(trans('messages.deleted_error')),
+                            ], 200);
+                        }
+                        else {
+                            return \Redirect::to($config['url'])
+                                ->withInput()
+                                ->with('message', ucfirst(trans('messages.deleted_error')));
+                        }
                     }
-            
                 }
-                else {
-
+                // catch error
+                catch(\Exception $e) {
+                    \DB::rollback();
+                    \Log::error('Error Message '.$e->getMessage());
+                    \Log::error('Error Trace '.$e->getTraceAsString());
                     if(\Request::ajax()) {
-
                         return \Response::json([
                             'success' => false,
                             'message' => ucfirst(trans('messages.deleted_error')),
                         ], 200);
-
                     }
                     else {
-
-                        return \Redirect::to($config['url'])
+                        return \Redirect::to($redirectKo)
                             ->withInput()
                             ->with('message', ucfirst(trans('messages.deleted_error')));
-
                     }
-
                 }
-
             }
+            // no item found
             else {
-
                 if(\Request::ajax()) {
-
                     return \Response::json([
                         'success' => false,
                         'message' => ucfirst(trans('messages.item_not_found')),
                     ], 200);
-
                 }
                 else {
-
                     return \Redirect::to($config['url'])
                         ->withInput()
                         ->with('message', ucfirst(trans('messages.item_not_found')));
-
                 }
-
             }
-
         }
 
         /**

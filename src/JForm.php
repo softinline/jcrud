@@ -92,22 +92,21 @@
          */
         public function submit($config, $form, $method=null, $tab=null, $id=null) {
 
-            // replace dynamic {id} with id
-            $config['url'] = str_replace('{id}', $this->_id, $config['url']);
-
-            // ajax
-            $config['url'] = ($config['ajax'] ? '#' : '').$config['url'];
-
-            $item = null;
-            if(!is_null($id)) {
-                $model = \App::make('\\App\\Models\\'.$config['model']);
-                $item = $model::getById($id);
+            // ajax request
+            $ajax = '';
+            if(array_key_exists('ajax', $config)) {
+                $ajax = $config['ajax'] ? '#' : '';
             }
-                                
+
+            // replace dynamic {id} with id
+            $config['url'] = $ajax.str_replace('{id}', $this->_id, $config['url']);
+            
+            // redirects url                                            
             $redirectOk = $config['url'];
             $redirectKo = $config['url'];
-                                    
-            $msg = is_null($item) ? 'created' : 'updated';
+            
+            // create or update message
+            $msg = is_null($id) ? 'created' : 'updated';
                                     
             // check Validators
             $validator = $this->validate($config, $form, $tab);
@@ -123,7 +122,7 @@
                     }
                                                                                             
                     // execute
-                    $result = $this->_controller::$method($item, $this->_id);
+                    $result = $this->_controller::$method($this->_item, $this->_id);
                                                             
                     if($result) {
 
@@ -224,10 +223,7 @@
          * rules
          */
         private function validate($config, $form, $tab) {
-
-            // prepare array of data
             $validatorRules = [];
-
             if($config['forms'][$form]['tabs'][$tab]["type"] == 'form') {
                 foreach($config['forms'][$form]['tabs'][$tab]['fields'] as $field) {
                     if($field['type'] != 'view') {
@@ -246,12 +242,9 @@
                     }
                 }
             }             
-
             // make validator
             $validator = \Validator::make(\Request::all(), $validatorRules);
-
             return $validator;
-
         }
 
         /**
@@ -404,9 +397,16 @@
          */
         public function toggleEnable($config, $method) {
 
-            // replace dynamic {id} with id
-            $config['url'] = str_replace('{id}', $this->_id, $config['url']);
+            // ajax request
+            $ajax = '';
+            if(array_key_exists('ajax', $config)) {
+                $ajax = $config['ajax'] ? '#' : '';
+            }
 
+            // replace dynamic {id} with id
+            $config['url'] = $ajax.str_replace('{id}', $this->_id, $config['url']);
+
+            // if has item call to method
             if($this->_item) {
 
                 // call method in class child

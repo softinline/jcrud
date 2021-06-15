@@ -74,6 +74,17 @@
             </thead>                    
             <tbody>
             </tbody>
+            <?php if(@$list['footer']) { ?>
+                <tfoot>
+                    <?php foreach($list['cols'] as $col) { ?>
+                        <?php if($col['searchable']) { ?>
+                            <th data-searchable="true"></th>
+                        <?php } else { ?>
+                            <th></th>
+                        <?php } ?>
+                    <?php } ?>                                                            
+                </tfoot>
+            <?php } ?>
         </table>
     </div>
 @stop

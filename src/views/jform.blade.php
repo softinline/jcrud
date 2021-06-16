@@ -88,7 +88,7 @@
                         <?php } elseif($tab['type'] == 'view') { ?>
                             <?php
                                 $show = true;
-                                if(array_key_exist('condition', $tab)) {
+                                if(array_key_exists('condition', $tab)) {
                                     $method = $tab['condition'];
                                     $show = $controller::$method(@$item);
                                 }

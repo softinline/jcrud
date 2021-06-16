@@ -85,12 +85,21 @@
                                 <input type="hidden" name="tab" id="tab" value="{{ $tab['key'] }}" />                                
                             </form>
                         <!-- view -->
-                        <?php } elseif($tab['type'] == 'view') { ?>                            
-                            @include($tab['view'], [                                
-                                'config' => $config,
-                                'item' => $item,
-                                'colKey' => $tab['key'],
-                            ])
+                        <?php } elseif($tab['type'] == 'view') { ?>
+                            <?php
+                                $show = true;
+                                if(array_key_exist('condition', $tab)) {
+                                    $method = $tab['condition'];
+                                    $show = $controller::$method(@$item);
+                                }
+                            ?>
+                            <?php if($show) { ?>
+                                @include($tab['view'], [
+                                    'config' => $config,
+                                    'item' => $item,
+                                    'colKey' => $tab['key'],
+                                ])
+                            <?php } ?>
                         <?php } ?>                          
                     </div>
                     <?php $first = false; ?>

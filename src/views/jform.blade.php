@@ -68,6 +68,7 @@
                                             {{ csrf_field() }}
                                             <?php foreach($tab['fields'] as $field) { ?>
                                                 <?php 
+                                                    // editor
                                                     if ($field['type'] == 'editor') {
                                                         $editors[] = $field['field'];
                                                     }
@@ -83,6 +84,16 @@
                                                             </div>
                                                         <?php } ?>
                                                     </div>
+                                                <?php } elseif($field['type'] == 'fieldset') { ?>
+                                                    <fieldset>
+                                                        <legend>{{ $field['title'] }}</legend>
+                                                        <?php foreach($field['fields'] as $subfield) { ?>
+                                                            @include('softinline::fields', [
+                                                                'field' => $subfield,
+                                                                'controller' => $controller,
+                                                            ])
+                                                        <?php } ?>
+                                                    </fieldset>
                                                 <?php } else { ?>
                                                     @include('softinline::fields', [
                                                         'field' => $field,

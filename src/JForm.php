@@ -232,7 +232,7 @@
 
                     if($field['type'] != 'view') {
 
-                        if($field['type'] == 'row') {
+                        if($field['type'] == 'row' || $field['type'] == 'fieldset') {
 
                             foreach($field['fields'] as $subfield) { 
 

@@ -4,6 +4,7 @@
         $method = $field['condition'];
         $process = $controller::$method(@$item);            
     }
+
 ?>
 <?php if($process) { ?>
     <?php if($field['type'] == 'custom') { ?>
@@ -38,7 +39,7 @@
     <?php if($field['type'] == 'datetime') { ?>
         <!-- datetime -->
         <div class="form-group">
-            <label>{{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $field['required'] ? '*' : '' }}</label>
+            <label>{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $field['required'] ? '*' : '' }}</label>
             <input type="text" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="{{ @$field['class'] != '' ?  $field['class'] : 'date-picker' }} form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} value="{{ @$item->{$field['field']} != '' ? $item->{$field['field']}->format("d/m/Y H:i") : '' }}">
         </div>
     <?php } ?>
@@ -160,29 +161,33 @@
         ])
     <?php } ?>
     <?php if(array_key_exists('childrens', $field)) { ?>
-        <script>
-            $("#{{ $field['field'] }}").on('change', function() {                
-                <?php if($field['type'] == 'checkbox') { ?>
-                    var value = $('input[name="{{ $field['field'] }}"]:checked').length > 0;
-                <?php } else { ?>
-                    var value = $("#{{ $field['field'] }}").val();
-                <?php } ?>                
-                $("#div-{{ $field['field'] }}").hide();
-                if(value == '{{ $field['childrens']['value'] }}') {
-                    $("#div-{{ $field['field'] }}").toggle('slow');
-                }
-            });
-        </script>
-        <?php 
-            // check if display
-            $display = @$item->{$field['field']} == $field['childrens']['value'] ? 'block' : 'none'; 
-        ?>
-        <div id="div-{{ $field['field'] }}" style="display:{{ $display }}" class="softinline-jcrud-childrens-div">
-            <?php foreach($field['childrens']['fields'] as $fieldChildren) { ?>                
-                @include('softinline::fields', [
-                    'field' => $fieldChildren
-                ])
-            <?php } ?>
-        </div>
+        <?php foreach($field['childrens'] as $children) { ?>
+            <script>
+                $("#{{ $field['field'] }}").on('change', function() {                
+                    <?php if($field['type'] == 'checkbox') { ?>
+                        var value = $('input[name="{{ $field['field'] }}"]:checked').length > 0;
+                    <?php } else { ?>
+                        var value = $("#{{ $field['field'] }}").val();
+                    <?php } ?>                
+                    $("#div-{{ $children['value'] }}").hide();
+                    if(value == '{{ $children['value'] }}') {
+                        $("#div-{{ $children['value'] }}").toggle('slow');
+                    }
+                });
+            </script>
+            <?php 
+                // check if display
+                $display = @$item->{$field['field']} == $children['value'] ? 'block' : 'none'; 
+            ?>
+            <div id="div-{{ $children['value'] }}" style="display:{{ $display }}" class="softinline-jcrud-childrens-div">
+                <?php foreach($children['fields'] as $fieldChildren) { ?>                
+                    @include('softinline::fields', [
+                        'field' => $fieldChildren,
+                        'controller' => $controller,
+                        'config' => $config,                    
+                    ])
+                <?php } ?>
+            </div>
+        <?php } ?>
     <?php } ?>
 <?php } ?>

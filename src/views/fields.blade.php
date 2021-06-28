@@ -169,9 +169,9 @@
                     <?php } else { ?>
                         var value = $("#{{ $field['field'] }}").val();
                     <?php } ?>                
-                    $("#div-{{ $children['value'] }}").hide();
+                    $("#div-{{ $field['field'] }}-{{ $children['value'] }}").hide();
                     if(value == '{{ $children['value'] }}') {
-                        $("#div-{{ $children['value'] }}").toggle('slow');
+                        $("#div-{{ $field['field'] }}-{{ $children['value'] }}").toggle('slow');
                     }
                 });
             </script>
@@ -179,7 +179,7 @@
                 // check if display
                 $display = @$item->{$field['field']} == $children['value'] ? 'block' : 'none'; 
             ?>
-            <div id="div-{{ $children['value'] }}" style="display:{{ $display }}" class="softinline-jcrud-childrens-div">
+            <div id="div-{{ $field['field'] }}-{{ $children['value'] }}" style="display:{{ $display }}" class="softinline-jcrud-childrens-div">
                 <?php foreach($children['fields'] as $fieldChildren) { ?>                
                     @include('softinline::fields', [
                         'field' => $fieldChildren,

@@ -164,8 +164,8 @@
         <?php foreach($field['childrens'] as $children) { ?>
             <script>
                 $("#{{ $field['field'] }}").on('change', function() {                
-                    <?php if($field['type'] == 'checkbox') { ?>
-                        var value = $('input[name="{{ $field['field'] }}-{{ $children['value']"]:checked').length > 0;
+                    <?php if($field['type'] == 'checkbox' || $field['type'] == 'checkbox-multiple') { ?>
+                        var value = $('input[name="{{ $field['field'] }}"]:checked').length > 0;
                     <?php } else { ?>
                         var value = $("#{{ $field['field'] }}").val();
                     <?php } ?>                

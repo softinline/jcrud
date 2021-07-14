@@ -165,7 +165,7 @@
             <script>
                 $("#{{ $field['field'] }}").on('change', function() {                
                     <?php if($field['type'] == 'checkbox') { ?>
-                        var value = $('input[name="{{ $field['field'] }}"]:checked').length > 0;
+                        var value = $('input[name="{{ $field['field'] }}-{{ $children['value']"]:checked').length > 0;
                     <?php } else { ?>
                         var value = $("#{{ $field['field'] }}").val();
                     <?php } ?>                

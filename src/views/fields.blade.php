@@ -167,7 +167,7 @@
                     $(".{{ $field['field'] }}").on('change', function() {                        
                         var value = $('input[name="{{ $field['field'] }}-{{ $children['value'] }}"]:checked').length > 0;                        
                         $("#div-{{ $field['field'] }}-{{ $children['value'] }}").hide();
-                        if(value == '{{ $children['value'] }}') {
+                        if(value) {
                             $("#div-{{ $field['field'] }}-{{ $children['value'] }}").toggle('slow');
                         }
                     });

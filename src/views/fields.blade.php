@@ -130,7 +130,7 @@
         </div>
     <?php } ?>
     <?php if($field['type'] == 'checkbox-multiple') { ?>
-        <!-- checkbox multiple -->
+        <!-- select multiple -->
         <?php 
             $method = $field['selector'];                                                    
             $options = $controller::$method(@$item);
@@ -138,7 +138,7 @@
         <div class="form-group">
             <label>{{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $field['required'] == 'required' ? '*' : '' }}</label>
             <?php foreach($options['all'] as $optionKey => $optionValue) { ?>
-                <br /><input type="checkbox" class="{{ $field['field'] }}" name="{{ $field['field'] }}[]" id="{{ $field['field'] }}-{{ $optionKey }}" style="padding:5px" value="{{ $optionKey }}" <?php echo array_key_exists($optionKey, $options['selected']) ? 'checked' : ''; ?>> {{ ucfirst($optionValue) }}
+                <br /><input type="checkbox" name="{{ $field['field'] }}[]" id="{{ $field['field'] }}" style="padding:5px" value="{{ $optionKey }}" <?php echo array_key_exists($optionKey, $options['selected']) ? 'checked' : ''; ?>> {{ ucfirst($optionValue) }}
             <?php } ?>
         </div>
     <?php } ?>
@@ -163,27 +163,17 @@
     <?php if(array_key_exists('childrens', $field)) { ?>
         <?php foreach($field['childrens'] as $children) { ?>
             <script>
-                <?php if($field['type'] == 'checkbox-multiple') { ?>
-                    $(".{{ $field['field'] }}").on('change', function() {                        
-                        var value = $('input[name="{{ $field['field'] }}-{{ $children['value'] }}"]:checked').length > 0;                        
-                        $("#div-{{ $field['field'] }}-{{ $children['value'] }}").hide();
-                        if(value) {
-                            $("#div-{{ $field['field'] }}-{{ $children['value'] }}").toggle('slow');
-                        }
-                    });
-                <?php } else { ?>
-                    $("#{{ $field['field'] }}").on('change', function() {
-                        <?php if($field['type'] == 'checkbox') { ?>
-                            var value = $('input[name="{{ $field['field'] }}-{{ $children['value'] }}"]:checked').length > 0;
-                        <?php } else { ?>
-                            var value = $("#{{ $field['field'] }}").val();
-                        <?php } ?>
-                        $("#div-{{ $field['field'] }}-{{ $children['value'] }}").hide();
-                        if(value == '{{ $children['value'] }}') {
-                            $("#div-{{ $field['field'] }}-{{ $children['value'] }}").toggle('slow');
-                        }
-                    });
-                <?php } ?>                
+                $("#{{ $field['field'] }}").on('change', function() {                
+                    <?php if($field['type'] == 'checkbox') { ?>
+                        var value = $('input[name="{{ $field['field'] }}"]:checked').length > 0;
+                    <?php } else { ?>
+                        var value = $("#{{ $field['field'] }}").val();
+                    <?php } ?>                
+                    $("#div-{{ $field['field'] }}-{{ $children['value'] }}").hide();
+                    if(value == '{{ $children['value'] }}') {
+                        $("#div-{{ $field['field'] }}-{{ $children['value'] }}").toggle('slow');
+                    }
+                });
             </script>
             <?php 
                 // check if display

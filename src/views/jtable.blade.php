@@ -61,7 +61,7 @@
             // default table class
             $class = !$list['class'] ? 'table table-hover table-bordered' : $list['class'];
         ?>
-        <table id="table-crud-{{ $list['name'] }}" class="table {{ $class }}">
+        <table id="table-crud-{{ $list['name'] }}" class="table {{ $class }}" style="width:100%">
             <thead>
                 <tr>
                     <?php if($list['actions']['selector']) { ?>

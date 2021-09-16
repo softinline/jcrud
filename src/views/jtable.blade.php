@@ -112,6 +112,14 @@
                 if(array_key_exists('data', $list)) {
                     $data = str_replace('{id}', $id, $list['data'].$query);
                 }
+
+                $orderCol = '0';
+                $orderType = 'desc';
+                if(array_key_exists('order', $list)) {
+                    $orederCol = $list['order']['col'];
+                    $orderType = $list['order']['type'];
+                }
+
             ?>
             
             crud.tables["{{ $list['name'] }}"].datatable = $('#table-crud-{{ $list['name'] }}').DataTable({
@@ -120,6 +128,7 @@
                 "serverSide": true,
                 "responsive": true,
                 "ajax": "<?php echo $data; ?>",
+                "order": [[ {{ $orderCol }}, "{{ $orderType }}" ]],
                 "columns": [
                     <?php if($list['actions']['selector']) { ?>
                             { data:"selector", name:"selector", orderable:false, searchable:false },

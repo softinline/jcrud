@@ -70,7 +70,7 @@
                     <?php foreach($list['cols'] as $col) { ?>
                         <?php
                             $title = $col['field'];
-                            if(array_key_exist('title', $col)) {
+                            if(array_key_exists('title', $col)) {
                                 $title = $col['title'];
                             }
                         ?>

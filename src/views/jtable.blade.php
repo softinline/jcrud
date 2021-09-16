@@ -69,9 +69,9 @@
                     <?php } ?>
                     <?php foreach($list['cols'] as $col) { ?>
                         <?php
-                            $title = @$col['title'];
-                            if($title == '') {
-                                $title = $col['field'];
+                            $title = $col['field'];
+                            if(array_key_exist('title', $col)) {
+                                $title = $col['title'];
                             }
                         ?>
                         <th>{{ ucfirst(trans('messages.'.$title)) }}</th>

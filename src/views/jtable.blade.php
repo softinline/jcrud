@@ -116,7 +116,7 @@
                 $orderCol = '0';
                 $orderType = 'desc';
                 if(array_key_exists('order', $list)) {
-                    $orederCol = $list['order']['col'];
+                    $orderCol = $list['order']['col'];
                     $orderType = $list['order']['type'];
                 }
 

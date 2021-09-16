@@ -73,8 +73,11 @@
                             if(array_key_exists('title', $col)) {
                                 $title = $col['title'];
                             }
+                            if($title != '') {
+                                $title = ucfirst(trans('messages.'.$title));
+                            }
                         ?>
-                        <th>{{ ucfirst(trans('messages.'.$title)) }}</th>
+                        <th>{{ $title }}</th>
                     <?php } ?>
                 </tr>
             </thead>                    

@@ -67,8 +67,14 @@
                     <?php if($list['actions']['selector']) { ?>
                         <th><input type="checkbox" id="chk-select-all" name="chk-select-all" /></th>
                     <?php } ?>
-                    <?php foreach($list['cols'] as $col) { ?>                                        
-                        <th>{{ ucfirst(trans('messages.'.$col['field'])) }}</th>
+                    <?php foreach($list['cols'] as $col) { ?>
+                        <?php
+                            $title = @$col['title'];
+                            if($title == '') {
+                                $title = $col['field'];
+                            }
+                        ?>
+                        <th>{{ ucfirst(trans('messages.'.$title)) }}</th>
                     <?php } ?>
                 </tr>
             </thead>                    

@@ -167,7 +167,7 @@
                         ]);
                     @endif
                 },
-                @if(array_key_exists('extra', $list['extra'])) {
+                @if(array_key_exists('extra', $list)) {
                     @include($list['extra'])
                 @endif
             });        

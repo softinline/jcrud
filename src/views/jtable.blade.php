@@ -81,7 +81,7 @@
                             $options = '';
                             if(array_key_exists('type', $col)) {
                                 if($col['type'] == 'date') {
-                                    $options .= " data-sort='YYYYMMDD' ";
+                                    $options .= " data-sort='DDMMYYYY' ";
                                 }
                             }
                         ?>

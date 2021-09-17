@@ -169,7 +169,7 @@
                 },
                 @if(array_key_exists('extra', $list['extra'])) {
                     @include($list['extra'])
-                }
+                @endif
             });        
             
             <?php if($list['actions']['selector']) { ?>

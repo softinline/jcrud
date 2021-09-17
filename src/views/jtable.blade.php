@@ -68,7 +68,8 @@
                         <th><input type="checkbox" id="chk-select-all" name="chk-select-all" /></th>
                     <?php } ?>
                     <?php foreach($list['cols'] as $col) { ?>
-                        <?php
+                        <?php         
+                            // title                                               
                             $title = $col['field'];
                             if(array_key_exists('title', $col)) {
                                 $title = $col['title'];
@@ -76,8 +77,15 @@
                             if($title != '') {
                                 $title = ucfirst(trans('messages.'.$title));
                             }
+                            // options
+                            $options = '';
+                            if(array_key_exists('type', $col)) {
+                                if($col['type'] == 'date') {
+                                    $options .= " data-sort='YYYYMMDD' ";
+                                }
+                            }
                         ?>
-                        <th>{{ $title }}</th>
+                        <th <?php echo $options; ?>>{{ $title }}</th>
                     <?php } ?>
                 </tr>
             </thead>                    

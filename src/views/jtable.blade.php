@@ -79,10 +79,8 @@
                             }
                             // options
                             $options = '';
-                            if(array_key_exists('type', $col)) {
-                                if($col['type'] == 'date') {
-                                    $options .= " data-sort='DDMMYYYY' ";
-                                }
+                            if(array_key_exists('options', $col)) {                                
+                                $options = $col['options'];
                             }
                         ?>
                         <th <?php echo $options; ?>>{{ $title }}</th>

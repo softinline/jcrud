@@ -1,14 +1,76 @@
 crud = {
     tables: Array(),
+    
     init:function() {
+
+        // extends datatable
+        $.extend(true, $.fn.dataTable.defaults, {
+            language: {
+                url: "/js/datatables/i18n/"+app.locale+".json",
+            },
+            pageLength : 25,
+            stateSave: true,
+            initComplete: function () {
+                            	
+            	// Get table
+            	var table = this.api();
+                                                                               
+                // FIX:ajax use search col
+                if(table.settings().ajax.url() != null) {
+                                    
+                    table.columns().every(function () {                    
+                        var column = this;
+                        var searchable = $(column.footer()).attr('data-searchable');
+                        if(searchable == "true") {
+                            var input = document.createElement('input');
+                            input.setAttribute('class', 'form-control');
+                            // Add input for searching                    
+                            $(input).appendTo($(column.footer()).empty());
+                            // Add events that make search
+                            $('input', column.footer()).on('keyup change', function () {
+                                if (column.search() !== this.value) {
+                                    column.search(this.value).draw();
+                                }
+                            });
+                        }
+                        else {
+                            var span = document.createElement('span');
+                            span.textContent = ' ';
+                            // Add input for searching                    
+                            $(input).appendTo($(column.footer()).empty());
+                        }
+                    });
+                    
+                }
+                
+                // Restore state
+                if(table.state.loaded()!=null) {
+                    var state = table.state.loaded();
+
+                    // Fill inputs added with info of search when reloading page 
+                    table.columns().eq(0).each(function (colIdx) {                        
+                        var colSearch = state.columns[colIdx].search;
+                        var column = this;
+
+                        if (colSearch.search) {
+                            // Only if exists the input
+                            if($(table.column(colIdx).footer()).html()!=null) $('input', table.column(colIdx).footer()).val(colSearch.search);
+                        }
+                    });
+                }
+            }            
+        });
+
         // capture delete click event on row
         $(document).on('click', '.delete',  function() {
             crud.delete($(this));
         });            
+
         // capture select all
         $(document).on('click', '.select-all-btn',  function() {            
             crud.selectAll($(this));
         });  
+
     },
     formRequireds: function(frm) {                
         var elements = document.forms[frm].elements;

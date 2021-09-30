@@ -17,8 +17,10 @@
          * urls, etc...
          */
         public function __construct($id=null, $controller=null) {
+            
             $this->_id = $id;
             $this->_controller = $controller;
+            
         }
 
         /**

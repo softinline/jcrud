@@ -16,9 +16,9 @@
         $editors = [];
     ?>    
     <div class="row">
-        <div class="col-lg-12"> 
+        <div class="col-lg-12">
             <ul class="nav nav-tabs">
-                <?php $first = true; ?>                
+                <?php $first = true; ?>
                 <?php foreach($form['tabs'] as $tab) { ?>
                     <?php
                         $show = true;
@@ -33,8 +33,8 @@
                         </li>
                         <?php $first = false; ?>
                     <?php } ?>
-                <?php } ?>                
-            </ul>                                    
+                <?php } ?>
+            </ul>
             <div class="tab-content">
                 <?php $first = true; ?>
                 <?php foreach($form['tabs'] as $tab) { ?>                

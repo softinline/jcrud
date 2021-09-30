@@ -129,6 +129,7 @@
             ?>
             
             crud.tables["{{ $list['name'] }}"].datatable = $('#table-crud-{{ $list['name'] }}').DataTable({
+                "sDom": "<'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",
                 "stateSave": true,
                 "processing": true,
                 "serverSide": true,

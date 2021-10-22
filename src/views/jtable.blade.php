@@ -56,51 +56,55 @@
         </div>
     </div>
     <br />
-    <div class="table">
-        <?php
-            // default table class
-            $class = !$list['class'] ? 'table table-hover table-bordered' : $list['class'];
-        ?>
-        <table id="table-crud-{{ $list['name'] }}" class="table {{ $class }}" style="width:100%">
-            <thead>
-                <tr>
-                    <?php if($list['actions']['selector']) { ?>
-                        <th><input type="checkbox" id="chk-select-all" name="chk-select-all" /></th>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="table">
+                <?php
+                    // default table class
+                    $class = !$list['class'] ? 'table table-hover table-bordered' : $list['class'];
+                ?>
+                <table id="table-crud-{{ $list['name'] }}" class="{{ $class }}" style="width:100%">
+                    <thead>
+                        <tr>
+                            <?php if($list['actions']['selector']) { ?>
+                                <th><input type="checkbox" id="chk-select-all" name="chk-select-all" /></th>
+                            <?php } ?>
+                            <?php foreach($list['cols'] as $col) { ?>
+                                <?php         
+                                    // title                                               
+                                    $title = $col['field'];
+                                    if(array_key_exists('title', $col)) {
+                                        $title = $col['title'];
+                                    }
+                                    if($title != '') {
+                                        $title = ucfirst(trans('messages.'.$title));
+                                    }
+                                    // options
+                                    $options = '';
+                                    if(array_key_exists('options', $col)) {                                
+                                        $options = $col['options'];
+                                    }
+                                ?>
+                                <th <?php echo $options; ?>>{{ $title }}</th>
+                            <?php } ?>
+                        </tr>
+                    </thead>                    
+                    <tbody>
+                    </tbody>
+                    <?php if(@$list['footer']) { ?>
+                        <tfoot>
+                            <?php foreach($list['cols'] as $col) { ?>
+                                <?php if($col['searchable']) { ?>
+                                    <th data-searchable="true"></th>
+                                <?php } else { ?>
+                                    <th></th>
+                                <?php } ?>
+                            <?php } ?>                                                            
+                        </tfoot>
                     <?php } ?>
-                    <?php foreach($list['cols'] as $col) { ?>
-                        <?php         
-                            // title                                               
-                            $title = $col['field'];
-                            if(array_key_exists('title', $col)) {
-                                $title = $col['title'];
-                            }
-                            if($title != '') {
-                                $title = ucfirst(trans('messages.'.$title));
-                            }
-                            // options
-                            $options = '';
-                            if(array_key_exists('options', $col)) {                                
-                                $options = $col['options'];
-                            }
-                        ?>
-                        <th <?php echo $options; ?>>{{ $title }}</th>
-                    <?php } ?>
-                </tr>
-            </thead>                    
-            <tbody>
-            </tbody>
-            <?php if(@$list['footer']) { ?>
-                <tfoot>
-                    <?php foreach($list['cols'] as $col) { ?>
-                        <?php if($col['searchable']) { ?>
-                            <th data-searchable="true"></th>
-                        <?php } else { ?>
-                            <th></th>
-                        <?php } ?>
-                    <?php } ?>                                                            
-                </tfoot>
-            <?php } ?>
-        </table>
+                </table>
+            </div>
+        </div>
     </div>
 @stop
 @section('scripts')
@@ -133,7 +137,7 @@
                 "stateSave": true,
                 "processing": true,
                 "serverSide": true,
-                "responsive": true,
+                "responsive": true,                
                 "ajax": "<?php echo $data; ?>",
                 "order": [[ {{ $orderCol }}, "{{ $orderType }}" ]],
                 "columns": [

@@ -39,7 +39,7 @@
     <?php if($field['type'] == 'datetime') { ?>
         <!-- datetime -->
         <div class="form-group">
-            <label>{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $field['required'] ? '*' : '' }}</label>
+            <label>{{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $field['required'] ? '*' : '' }}</label>
             <input type="text" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="{{ @$field['class'] != '' ?  $field['class'] : 'date-picker' }} form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} value="{{ @$item->{$field['field']} != '' ? $item->{$field['field']}->format("d/m/Y H:i") : '' }}">
         </div>
     <?php } ?>

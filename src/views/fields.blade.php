@@ -2,7 +2,7 @@
     $process = true;
     if(array_key_exists('condition', $field)) {
         $method = $field['condition'];
-        $process = $controller::$method(@$item);            
+        $process = $controller::$method(@$item, @$id);            
     }
 
 ?>
@@ -11,7 +11,7 @@
         <!-- custom -->
         <?php            
             $method = $field['custom'];
-            $response = $controller::$method(@$item);
+            $response = $controller::$method(@$item, @$id);
             echo $response;
         ?>
     <?php } ?>
@@ -24,7 +24,7 @@
         <?php if(array_key_exists('show', $field)) { ?>
             <?php
                 $method = $field['show'];
-                $show = $controller::$method(@$item);
+                $show = $controller::$method(@$item, @$id);
             ?>
             <?php echo $show; ?>
         <?php } ?>
@@ -102,7 +102,7 @@
         <!-- select -->
         <?php 
             $method = $field['selector'];            
-            $options = $controller::$method(@$item);
+            $options = $controller::$method(@$item, @$id);
         ?>
         <div class="form-group">
             <label>{{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $field['required'] ? '*' : '' }}</label>
@@ -118,7 +118,7 @@
         <!-- select multiple -->
         <?php 
             $method = $field['selector'];                                                    
-            $options = $controller::$method(@$item);
+            $options = $controller::$method(@$item, @$id);
         ?>
         <div class="form-group">
             <label>{{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $field['required'] ? '*' : '' }}</label>
@@ -133,7 +133,7 @@
         <!-- select multiple -->
         <?php 
             $method = $field['selector'];                                                    
-            $options = $controller::$method(@$item);
+            $options = $controller::$method(@$item, @$id);
         ?>
         <div class="form-group">
             <label>{{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $field['required'] == 'required' ? '*' : '' }}</label>
@@ -184,7 +184,8 @@
                     @include('softinline::fields', [
                         'field' => $fieldChildren,
                         'controller' => $controller,
-                        'config' => $config,                    
+                        'config' => $config,
+                        'id' => $id,
                     ])
                 <?php } ?>
             </div>

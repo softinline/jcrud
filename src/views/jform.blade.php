@@ -80,6 +80,7 @@
                                                                 @include('softinline::fields', [
                                                                     'field' => $subfield,
                                                                     'controller' => $controller,
+                                                                    'id' => $id,
                                                                 ])
                                                             </div>
                                                         <?php } ?>
@@ -91,6 +92,7 @@
                                                             @include('softinline::fields', [
                                                                 'field' => $subfield,
                                                                 'controller' => $controller,
+                                                                'id' => $id,
                                                             ])
                                                         <?php } ?>
                                                     </fieldset>
@@ -98,6 +100,7 @@
                                                     @include('softinline::fields', [
                                                         'field' => $field,
                                                         'controller' => $controller,
+                                                        'id' => $id,
                                                     ])
                                                 <?php } ?>
                                             <?php } ?>

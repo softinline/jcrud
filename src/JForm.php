@@ -78,6 +78,7 @@
                                                             
             // return view
             return View('softinline::jform', [
+                'id' => $this->_id,
                 'config' => $config,
                 'form' => $config['forms'][$form],
                 'controller' => $this->_controller,

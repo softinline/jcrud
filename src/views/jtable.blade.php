@@ -133,11 +133,12 @@
             ?>
             
             crud.tables["{{ $list['name'] }}"].datatable = $('#table-crud-{{ $list['name'] }}').DataTable({
-                "sDom": "<'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",
+                "sDom":"<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n        <'table-responsive'tr>\n        <'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+                /*"sDom": "<'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",*/
                 "stateSave": true,
                 "processing": true,
                 "serverSide": true,
-                "responsive": true,                
+                /*"responsive": true,*/
                 "ajax": "<?php echo $data; ?>",
                 "order": [[ {{ $orderCol }}, "{{ $orderType }}" ]],
                 "columns": [

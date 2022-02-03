@@ -128,7 +128,7 @@
                     <option value="{{ $optionKey }}" <?php echo $optionKey ==  @$item->{$field['field']} ? 'selected' : ''; ?>>{{ ucfirst($optionValue) }}</option>
                 <?php } ?>
             </select>
-            <button type="button" class="btn btn-primary" onclick="$('#modal-{{ $field['field'] }}').modal()">{{ ucfirst(trans('messages.options')) }}</button>
+            <button type="button" class="btn btn-primary mt-2" onclick="$('#modal-{{ $field['field'] }}').modal()">{{ ucfirst(trans('messages.options')) }}</button>
         </div>
         <div class="modal" tabindex="-1" role="dialog" id="modal-{{ $field['field'] }}">
             <div class="modal-dialog" role="document">

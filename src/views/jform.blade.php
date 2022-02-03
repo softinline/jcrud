@@ -148,7 +148,9 @@
         <?php } ?>
 
         function selectPopUpOption(field, key) {
+            $(".selectable-row").removeClass('selectable-row-selected');
             $("#"+field).val(key);
+            $("#selectable-row-"+key).addClass('selectable-row-selected');
         }
     </script>
 @endsection

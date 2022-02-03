@@ -141,18 +141,16 @@
                     </div>
                     <div class="modal-body">                        
                         <?php foreach($options as $optionKey => $optionValue) { ?>                            
-                            <div class="row selectable-row" onclick="selectPopUpOption('{{ $field['field'] }}', '{{ $optionKey }}'); $('#modal-{{ $field['field'] }}').modal('close')">
-                                <div class="col-lg-2">
-                                    {{ $optionKey }}
-                                </div>
-                                <div class="col-lg-10">
+                            <div class="row selectable-row <?php echo $optionKey ==  @$item->{$field['field']} ? 'selectable-row-selected' : ''; ?>" id="selectable-row-{{ $optionKey }}" onclick="selectPopUpOption('{{ $field['field'] }}', '{{ $optionKey }}'); $('#modal-{{ $field['field'] }}').modal('close')">                                
+                                <div class="col-lg-12">
                                     {{ ucfirst($optionValue) }}
+                                    <br /><small>{{ $optionKey }}</small>
                                 </div>
                             </div>
                         <?php } ?>
                     </div>
                     <div class="modal-footer">                        
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ ucfirst(trans('messages.accept')) }}</button>
                     </div>
                 </div>
             </div>

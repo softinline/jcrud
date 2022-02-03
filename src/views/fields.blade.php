@@ -114,6 +114,50 @@
             </select>
         </div>
     <?php } ?>
+    <?php if($field['type'] == 'selectPopUp') { ?>
+        <!-- selectPopUp -->
+        <?php 
+            $method = $field['selector'];            
+            $options = $controller::$method(@$item, @$id);
+        ?>
+        <div class="form-group">
+            <label>{{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $field['required'] ? '*' : '' }}</label>
+            <select name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }}>
+                <option value="">{{ ucfirst(trans('messages.select-option')) }}</option>
+                <?php foreach($options as $optionKey => $optionValue) { ?>
+                    <option value="{{ $optionKey }}" <?php echo $optionKey ==  @$item->{$field['field']} ? 'selected' : ''; ?>>{{ ucfirst($optionValue) }}</option>
+                <?php } ?>
+            </select>
+            <button type="button" class="btn btn-primary" onclick="$('#modal-{{ $field['field'] }}').modal()">{{ ucfirst(trans('messages.options')) }}</button>
+        </div>
+        <div class="modal" tabindex="-1" role="dialog" id="modal-{{ $field['field'] }}">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{ ucfirst(trans('messages.select-option')) }} </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">                        
+                        <?php foreach($options as $optionKey => $optionValue) { ?>                            
+                            <div class="row selectable-row" onclick="selectPopUpOption('{{ $field['field'] }}', '{{ $optionKey }}'); $('#modal-{{ $field['field'] }}').modal('close')">
+                                <div class="col-lg-2">
+                                    {{ $optionKey }}
+                                </div>
+                                <div class="col-lg-10">
+                                    {{ ucfirst($optionValue) }}
+                                </div>
+                            </div>
+                        <?php } ?>
+                    </div>
+                    <div class="modal-footer">                        
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php } ?>
     <?php if($field['type'] == 'select-multiple') { ?>
         <!-- select multiple -->
         <?php 

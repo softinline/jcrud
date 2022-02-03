@@ -133,8 +133,8 @@
 @endsection
 @section('scripts')
     @parent
-    <?php if(count($editors) > 0) { ?>        
-        <script>
+    <script>
+        <?php if(count($editors) > 0) { ?>                
             // ckeditor
             var options = {
                 skin:'kama',         
@@ -144,7 +144,11 @@
             };
             <?php foreach($editors as $editor) { ?>
                 CKEDITOR.replace('{{ $editor }}',options);
-            <?php } ?>
-        </script>
-    <?php } ?>
+            <?php } ?>                    
+        <?php } ?>
+
+        function selectPopUpOption(field, key) {
+            $("#"+field).val(key);
+        }
+    </script>
 @endsection

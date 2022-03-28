@@ -75,7 +75,14 @@
 
             // replace dynamic {id} with id
             $config['url'] = str_replace('{id}', $this->_id, $config['url']);
-                                                            
+
+            // breadcrumb custom
+            $breadcrumb = null;
+            if(array_key_exists('breadcrumb', $config['forms'][$form])) {
+                $breadcrumbMethod = $config['forms'][$form]['breadcrumb'];
+                $breadcrumb = $this->_controller::$breadcrumbMethod(@$this->_item, @$this->_id);
+            }
+
             // return view
             return View('softinline::jform', [
                 'id' => $this->_id,
@@ -83,6 +90,7 @@
                 'form' => $config['forms'][$form],
                 'controller' => $this->_controller,
                 'item' => $this->_item,
+                'breadcrumb' => $breadcrumb,
             ])->render();
 
         }

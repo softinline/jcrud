@@ -11,17 +11,21 @@
                 <div class="breadcrumb">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item">
-                                <a href="{{ url('/') }}">Dashboard</a>
-                            </li>
-                            <?php if(array_key_exists('url_parent', $config)) { ?>
+                            <?php if($breadcrumb) { ?>
+                                <?php echo $breadcrumb; ?>
+                            <?php } else { ?>
                                 <li class="breadcrumb-item">
-                                    <a href="{{ url($config['url_parent']) }}">{{ ucfirst(trans('messages.'.$config['title_parent'])) }}</a>
+                                    <a href="{{ url('/') }}">Dashboard</a>
+                                </li>
+                                <?php if(array_key_exists('url_parent', $config)) { ?>
+                                    <li class="breadcrumb-item">
+                                        <a href="{{ url($config['url_parent']) }}">{{ ucfirst(trans('messages.'.$config['title_parent'])) }}</a>
+                                    </li>
+                                <?php } ?>
+                                <li class="breadcrumb-item active">
+                                    {{ ucfirst(trans('messages.'.$config['title'])) }}
                                 </li>
                             <?php } ?>
-                            <li class="breadcrumb-item active">
-                                {{ ucfirst(trans('messages.'.$config['title'])) }}
-                            </li>
                         </ol>
                     </nav>
                 </div>

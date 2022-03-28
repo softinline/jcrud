@@ -81,6 +81,7 @@
                                                                     'field' => $subfield,
                                                                     'controller' => $controller,
                                                                     'id' => $id,
+                                                                    'config' => $config,
                                                                 ])
                                                             </div>
                                                         <?php } ?>
@@ -93,6 +94,7 @@
                                                                 'field' => $subfield,
                                                                 'controller' => $controller,
                                                                 'id' => $id,
+                                                                'config' => $config,
                                                             ])
                                                         <?php } ?>
                                                     </fieldset>
@@ -101,16 +103,17 @@
                                                         'field' => $field,
                                                         'controller' => $controller,
                                                         'id' => $id,
+                                                        'config' => $config,
                                                     ])
                                                 <?php } ?>
                                             <?php } ?>
                                         </div>
                                         <div class="card-footer">
-                                            <button type="button" name="btn-submit" id="btn-submit" class="btn btn-primary btn-sm" onclick="crud.submit('{{ $frmName }}')"><i class="loading"></i> {{ ucfirst(trans('messages.accept')) }}</button>
+                                            <button type="button" name="btn-submit" id="btn-submit" class="btn btn-primary {{ @$config['btnStyles'] }}" onclick="crud.submit('{{ $frmName }}')"><i class="loading"></i> {{ ucfirst(trans('messages.accept')) }}</button>
                                             <?php foreach($tab['extraButtons'] as $extraButton) { ?>
-                                                <button type="button" class="btn btn-primary btn-sm" onclick="{{ $extraButton[1] }}('{{ @$item->id }}')"> {{ ucfirst(trans('messages.'.$extraButton[0])) }}</button>
+                                                <button type="button" class="btn btn-primary {{ @$config['btnStyles'] }}" onclick="{{ $extraButton[1] }}('{{ @$item->id }}')"> {{ ucfirst(trans('messages.'.$extraButton[0])) }}</button>
                                             <?php } ?>
-                                            <a href="{{ url($ajax.$config['url'].$query) }}" class="btn btn-secondary btn-sm"> {{ ucfirst(trans('messages.cancel')) }}</a>
+                                            <a href="{{ url($ajax.$config['url'].$query) }}" class="btn btn-secondary {{ @$config['btnStyles'] }}"> {{ ucfirst(trans('messages.cancel')) }}</a>
                                         </div>
                                     </div>
                                     <input type="hidden" name="tab" id="tab" value="{{ $tab['key'] }}" />                                
@@ -121,6 +124,7 @@
                                     'config' => $config,
                                     'item' => $item,
                                     'colKey' => $tab['key'],
+                                    'config' => $config,
                                 ])                                
                             <?php } ?>                          
                         </div>

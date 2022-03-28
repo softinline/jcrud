@@ -74,7 +74,7 @@
     <?php if($field['type'] == 'button') { ?>
         <!-- button -->
         <div class="form-group">
-            <button type="button" class="btn btn-primary btn-sm" onclick="{{ $field['action'] }}">{{ ucfirst(trans('messages.'.$field['title'])) }}</button>
+            <button type="button" class="btn btn-primary {{ @$config['btnStyles'] }}" onclick="{{ $field['action'] }}">{{ ucfirst(trans('messages.'.$field['title'])) }}</button>
         </div>
     <?php } ?>                                            
     <?php if($field['type'] == 'checkbox') { ?>
@@ -128,7 +128,7 @@
                     <option value="{{ $optionKey }}" <?php echo $optionKey ==  @$item->{$field['field']} ? 'selected' : ''; ?>>{{ ucfirst($optionValue) }}</option>
                 <?php } ?>
             </select>
-            <button type="button" class="btn btn-primary mt-2" onclick="$('#modal-{{ $field['field'] }}').modal()">{{ ucfirst(trans('messages.options')) }}</button>
+            <button type="button" class="btn btn-primary {{ @$config['btnStyles'] }} mt-2" onclick="$('#modal-{{ $field['field'] }}').modal()">{{ ucfirst(trans('messages.options')) }}</button>
         </div>
         <div class="modal" tabindex="-1" role="dialog" id="modal-{{ $field['field'] }}">
             <div class="modal-dialog" role="document">
@@ -150,7 +150,7 @@
                         <?php } ?>
                     </div>
                     <div class="modal-footer">                        
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ ucfirst(trans('messages.accept')) }}</button>
+                        <button type="button" class="btn btn-secondary {{ @$config['btnStyles'] }}" data-dismiss="modal">{{ ucfirst(trans('messages.accept')) }}</button>
                     </div>
                 </div>
             </div>

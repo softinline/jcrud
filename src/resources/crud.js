@@ -2,7 +2,7 @@ crud = {
     tables: Array(),
     
     init:function() {
-
+        
         // extends datatable
         $.extend(true, $.fn.dataTable.defaults, {
             language: {
@@ -21,7 +21,7 @@ crud = {
                     table.columns().every(function () {                    
                         var column = this;
                         var searchable = $(column.footer()).attr('data-searchable');
-                        if(searchable == "true") {
+                        if(searchable == "true") {                            
                             var input = document.createElement('input');
                             input.setAttribute('class', 'form-control');
                             // Add input for searching                    
@@ -86,14 +86,14 @@ crud = {
         return true;
     },
     export: function(obj) {
-        var entity = $(obj).attr('data-entity');
+        var url = $(obj).attr('data-url');
         var datatable = $(obj).attr('data-datatable');        
         if(crud.tables[datatable].selected.length > 0) {
             var bConfirm = confirm(i18n.t('are you sure of export') + ' ' + crud.tables[datatable].selected.length+' '+i18n.t('elements'));
             if(bConfirm) {
                 $.ajax({
                     method: "post",
-                    url: '/'+entity+'/export-selected',
+                    url: '/'+url+'/export-selected',
                     data: {
                         ids: JSON.stringify(crud.tables[datatable].selected),
                     },
@@ -121,7 +121,7 @@ crud = {
         }
     },
     selectAll: function(obj) {
-        var entity = obj.attr('data-entity');
+        var url = obj.attr('data-url');
         var datatable = obj.attr('data-datatable');
         if(crud.tables[datatable].selected.length > 0) {
             crud.tables[datatable].selected = Array();
@@ -130,7 +130,7 @@ crud = {
         else {            
             $.ajax({
                 method: "post",
-                url: "/"+entity+"/select-all",
+                url: "/"+url+"/select-all",
                 success: function(data) {                    
                     $.each(data.data, function(i, item) {
                         var id = data.data[i].id;
@@ -153,12 +153,12 @@ crud = {
     },
     toggleEnable: function(obj) {        
         var id = obj.attr('data-id');
-        var entity = obj.attr('data-entity');
+        var url = obj.attr('data-url');
         var datatable = obj.attr('data-datatable');
         $("body").LoadingOverlay('show');
         $.ajax({
             method: "post",
-            url: "/"+entity+"/"+id+"/toggle-enable",
+            url: "/"+url+"/"+id+"/toggle-enable",
             success: function(data) {                    
                 if (data.success) {
                     alerts.show('ok', data.message);
@@ -178,14 +178,14 @@ crud = {
     },
     delete: function(obj) {        
         var id = obj.attr('data-id');
-        var entity = obj.attr('data-entity');
+        var url = obj.attr('data-url');
         var datatable = obj.attr('data-datatable');
-        var bConfirm = confirm(i18n.t('are you sure to delete') + ' ['+entity+'] #'+id+'?');
+        var bConfirm = confirm(i18n.t('are you sure to delete') + ' ['+url+'] #'+id+'?');
         if(bConfirm) {
             $("body").LoadingOverlay('show');
             $.ajax({
                 method: "post",
-                url: "/"+entity+"/"+id+"/delete",
+                url: "/"+url+"/"+id+"/delete",
                 success: function(data) {                    
                     if (data.success) {
                         alerts.show('ok', data.message);

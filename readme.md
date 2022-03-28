@@ -64,8 +64,7 @@ This is a simple basic sample define for table users:
     "admin-users":{
         "model":"User",            
         "title":"users",
-        "title_custom":false,
-        "entity":"admin/users",
+        "titleCustom":false,        
         "url":"admin/users",
         "layout":"layouts.other",
         "lists":{

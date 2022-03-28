@@ -1,6 +1,7 @@
 <?php   
     // wrapper extends
     $wrapper = !$list['wrapper'] ? 'softinline::jtable_wrapper' : $list['wrapper'];
+    
     $query = http_build_query(\Request::all());
     if($query != '') {
         $query = '?'.$query;

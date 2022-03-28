@@ -10,7 +10,9 @@
     // check if use ajax
     $ajax = @$config['ajax'] ? '#' : '';
 ?>
-@extends($wrapper)
+@extends($wrapper, [
+    'breadcrumb' => $breadcrumb
+])
 @section('body')
     <?php 
         $editors = [];

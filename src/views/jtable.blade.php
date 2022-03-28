@@ -9,7 +9,9 @@
     // check if use ajax
     $ajax = @$config['ajax'] ? '#' : '';
 ?>
-@extends($wrapper)
+@extends($wrapper, [
+    'breadcrumb' => $breadcrumb
+])
 @section('body')
     <div class="row">
         <div class="col-lg-12 text-right">

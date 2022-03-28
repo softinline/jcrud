@@ -1,5 +1,5 @@
 @extends($config['layout'])
-@section('content')    
+@section('content')
     <div class="container mt-5 mb-5">
         <div class="row mt-2">
             <div class="col-lg-6">

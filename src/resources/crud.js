@@ -90,11 +90,12 @@ crud = {
         });  
 
     },
-    formRequireds: function(frm) {                
+    formRequireds: function(frm) {        
         var elements = document.forms[frm].elements;
-        for (i=0; i<elements.length; i++){        
+        for (i=0; i<elements.length; i++) {
+            console.log(elements[i]);
             if(elements[i].classList.contains("frm-item-required")) {
-                if(elements[i].value == '') {                                        
+                if(elements[i].value == '') {
                     alerts.show('ko', elements[i].getAttribute('data-title') + ' ' + i18n.t('is required'));
                     $("#"+elements[i].name).addClass('required');
                     return false;
@@ -220,13 +221,13 @@ crud = {
         }
     },
     submit: function(frm) {
-        if(crud.formRequireds(frm)) {
-            var action = $("#"+frm).attr('action');            
-            if(typeof CKEDITOR != undefined && typeof CKEDITOR != 'undefined') {
-                for (var i in CKEDITOR.instances) {
-                    CKEDITOR.instances[i].updateElement();
-                };
-            }
+        if(typeof CKEDITOR != undefined && typeof CKEDITOR != 'undefined') {
+            for (var i in CKEDITOR.instances) {
+                CKEDITOR.instances[i].updateElement();
+            };
+        }
+        if(crud.formRequireds(frm)) {                        
+            var action = $("#"+frm).attr('action');
             var data = new FormData(document.getElementById(frm));
             $("#btn-submit").find('.loading').addClass("fa fa-spinner spin");        
             $("#btn-submit").prop("disabled",true);

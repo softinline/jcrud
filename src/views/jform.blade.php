@@ -9,6 +9,13 @@
 
     // check if use ajax
     $ajax = @$config['ajax'] ? '#' : '';
+
+    // check if use languages
+    $languages= false;
+    if(array_key_exists('languages', $config)) {
+        $method = $config['languages'];
+        $languages = $controller::$method(@$item);
+    }
 ?>
 @extends($wrapper, [
     'breadcrumb' => $breadcrumb
@@ -72,7 +79,7 @@
                                                 <?php 
                                                     // editor
                                                     if ($field['type'] == 'editor') {
-                                                        $editors[] = $field['field'];
+                                                        $editors[] = $field;
                                                     }
                                                 ?>
                                                 <?php if($field['type'] == 'row') { ?>
@@ -149,7 +156,12 @@
                 /*extraPlugins:'justify',*/
             };
             <?php foreach($editors as $editor) { ?>
-                CKEDITOR.replace('{{ $editor }}',options);
+                CKEDITOR.replace('{{ $editor['field'] }}',options);
+                <?php if($editor['translate']) { ?>
+                    <?php foreach($languages as $language) { ?>
+                        CKEDITOR.replace('{{ $editor['field'] }}_{{ $language->id }}',options);
+                    <?php } ?>                
+                <?php } ?>                
             <?php } ?>                    
         <?php } ?>
 

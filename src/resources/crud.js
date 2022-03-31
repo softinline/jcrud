@@ -18,37 +18,51 @@ crud = {
                 // FIX:ajax use search col
                 if(table.settings().ajax.url() != null) {
                                     
-                    table.columns().every(function () {                    
+                    table.columns().every(function () {    
+
                         var column = this;
                         var searchable = $(column.footer()).attr('data-searchable');
-                        if(searchable == "true") {                            
+
+                        if(searchable == "true") {     
+
                             var input = document.createElement('input');
                             input.setAttribute('class', 'form-control');
-                            // Add input for searching                    
+
+                            // Add input for searching                                                
                             $(input).appendTo($(column.footer()).empty());
+
                             // Add events that make search
                             $('input', column.footer()).on('keyup change', function () {
+
                                 if (column.search() !== this.value) {
                                     column.search(this.value).draw();
                                 }
+
                             });
+
                         }
                         else {
+
                             var span = document.createElement('span');
                             span.textContent = ' ';
+
                             // Add input for searching                    
                             $(input).appendTo($(column.footer()).empty());
+
                         }
+
                     });
                     
                 }
                 
                 // Restore state
                 if(table.state.loaded()!=null) {
+
                     var state = table.state.loaded();
 
                     // Fill inputs added with info of search when reloading page 
-                    table.columns().eq(0).each(function (colIdx) {                        
+                    table.columns().eq(0).each(function (colIdx) {    
+
                         var colSearch = state.columns[colIdx].search;
                         var column = this;
 
@@ -56,9 +70,13 @@ crud = {
                             // Only if exists the input
                             if($(table.column(colIdx).footer()).html()!=null) $('input', table.column(colIdx).footer()).val(colSearch.search);
                         }
+
                     });
+
                 }
-            }            
+
+            }       
+
         });
 
         // capture delete click event on row
@@ -75,9 +93,9 @@ crud = {
     formRequireds: function(frm) {                
         var elements = document.forms[frm].elements;
         for (i=0; i<elements.length; i++){        
-            if(elements[i].classList.contains("frm-item-required")) {                
-                if(elements[i].value == '') {                    
-                    alerts.show('ko', $("#"+elements[i].name).prev('label').html() + ' ' + i18n.t('is required'));
+            if(elements[i].classList.contains("frm-item-required")) {
+                if(elements[i].value == '') {                                        
+                    alerts.show('ko', elements[i].getAttribute('data-title') + ' ' + i18n.t('is required'));
                     $("#"+elements[i].name).addClass('required');
                     return false;
                 }

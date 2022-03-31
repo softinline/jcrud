@@ -4,7 +4,6 @@
         $method = $field['condition'];
         $process = $controller::$method(@$item, @$id);            
     }
-
 ?>
 <?php if($process) { ?>
     <?php if($field['type'] == 'custom') { ?>
@@ -19,7 +18,7 @@
         <!-- file -->
         <div class="form-group">
             <label>{{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $field['required'] ? '*' : '' }}</label>
-            <input type="file" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="{{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} value="{{ @$item->{$field['field']} }}">
+            <input type="file" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="{{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} value="{{ @$item->{$field['field']} }}" data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}">
         </div>
         <?php if(array_key_exists('show', $field)) { ?>
             <?php
@@ -33,42 +32,82 @@
         <!-- date -->
         <div class="form-group">
             <label>{{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $field['required'] ? '*' : '' }}</label>
-            <input type="text" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="{{ @$field['class'] != '' ?  $field['class'] : 'date-picker' }} form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} value="{{ @$item->{$field['field']} != '' ? $item->{$field['field']}->format("d/m/Y") : '' }}" autocomplete="off">
+            <input type="text" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="{{ @$field['class'] != '' ?  $field['class'] : 'date-picker' }} form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} value="{{ @$item->{$field['field']} != '' ? $item->{$field['field']}->format("d/m/Y") : '' }}" autocomplete="off" data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}">
         </div>
     <?php } ?>
     <?php if($field['type'] == 'datetime') { ?>
         <!-- datetime -->
         <div class="form-group">
             <label>{{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $field['required'] ? '*' : '' }}</label>
-            <input type="text" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="{{ @$field['class'] != '' ?  $field['class'] : 'date-picker' }} form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} value="{{ @$item->{$field['field']} != '' ? $item->{$field['field']}->format("d/m/Y H:i") : '' }}">
+            <input type="text" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="{{ @$field['class'] != '' ?  $field['class'] : 'date-picker' }} form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} value="{{ @$item->{$field['field']} != '' ? $item->{$field['field']}->format("d/m/Y H:i") : '' }}" data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}">
         </div>
     <?php } ?>
-    <?php if($field['type'] == 'text') { ?>
+    <?php if($field['type'] == 'text') { ?>        
         <!-- text -->
-        <div class="form-group">
-            <label>{{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $field['required'] ? '*' : '' }}</label>
-            <input type="text" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} value="{{ @$item->{$field['field']} }}">
-        </div>
+        <?php if(@$field['translate']) { ?>
+            <div class="form-group">
+                <label>{{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $field['required'] ? '*' : '' }}</label>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#tab_{{ $field['field'] }}_default" data-toggle="tab" aria-expanded="false" id="li-text-area">                
+                            Default {{ $field['required'] ? '*' : '' }}
+                        </a>
+                    </li>
+                    @foreach($languages as $language)
+                        <li>
+                            <a class="nav-link" href="#tab_{{ $field['field'] }}_{{ $language->id }}" data-toggle="tab" aria-expanded="false" id="li-text-area">
+                                {{ ucfirst($language->language) }} {{ $field['translationsRequired'] ? '*' : '' }}
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>    
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab_{{ $field['field'] }}_default">
+                        <div class="form-group">
+                            <input type="text" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} value="{{ @$item->{$field['field']} }}" data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}">
+                        </div>
+                    </div>
+                    <?php                                            
+                        if($item) {
+                            $method = $field['translations'];
+                            $translations = $controller::$method($field['field'], @$item, @$item->id);
+                        }
+                    ?>                    
+                    @foreach($languages as $language)
+                        <div class="tab-pane" id="tab_{{ $field['field'] }}_{{ $language->id }}">
+                            <div class="form-group">                                
+                                <input type="text" name="{{ $field['field'] }}_{{ $language->id }}" id="{{ $field['field'] }}_{{ $language->id }}" class="form-control {{ $field['translationsRequired'] ? 'frm-item-required' : '' }}" {{ $field['translationsRequired'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} value="{{ $translations[$language->id] }}" data-title="{{ ucfirst(trans('messages.'.$field['title'])) }} ({{ $language->id }})">
+                            </div>
+                        </div>
+                    @endforeach                    
+                </div>     
+            </div>
+        <?php } else { ?>
+            <div class="form-group">
+                <label>{{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $field['required'] ? '*' : '' }}</label>
+                <input type="text" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} value="{{ @$item->{$field['field']} }}" data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}">
+            </div>
+        <?php } ?>
     <?php } ?>
     <?php if($field['type'] == 'number') { ?>
         <!-- number -->
         <div class="form-group">
             <label>{{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $field['required'] ? '*' : '' }}</label>
-            <input type="number" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} value="{{ @$item->{$field['field']} }}">
+            <input type="number" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} value="{{ @$item->{$field['field']} }}" data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}">
         </div>
     <?php } ?>        
     <?php if($field['type'] == 'password') { ?>
         <!-- password -->
         <div class="form-group">
             <label>{{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $field['required'] ? '*' : '' }}</label>
-            <input type="password" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }}>
+            <input type="password" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}">
         </div>
     <?php } ?>                                            
     <?php if($field['type'] == 'email') { ?>
         <!-- email -->
         <div class="form-group">
             <label>{{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $field['required'] ? '*' : '' }}</label>                                
-            <input type="email" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} value="{{ @$item->{$field['field']} }}">
+            <input type="email" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} value="{{ @$item->{$field['field']} }}" data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}">
         </div>
     <?php } ?>                                            
     <?php if($field['type'] == 'button') { ?>
@@ -80,24 +119,67 @@
     <?php if($field['type'] == 'checkbox') { ?>
         <!-- checkbox -->
         <div class="form-group">                                                    
-            <input type="checkbox" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="{{ $field['required'] ? 'frm-item-required' : '' }}" {{ @$field['disabled'] ? 'disabled' : '' }} value="1" <?php echo @$item->{$field['field']} === 1 ? 'checked' : ''; ?> {{ $field['required'] ? 'required' : '' }}>
+            <input type="checkbox" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="{{ $field['required'] ? 'frm-item-required' : '' }}" {{ @$field['disabled'] ? 'disabled' : '' }} value="1" <?php echo @$item->{$field['field']} === 1 ? 'checked' : ''; ?> {{ $field['required'] ? 'required' : '' }} data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}">
             <label>{{ ucfirst(trans('messages.'.$field['title'])) }} {{ $field['required'] ? '*' : '' }}</label>
         </div>
     <?php } ?>                                            
-    <?php if($field['type'] == 'textarea') { ?>
-        <!-- textarea -->
-        <div class="form-group">                                                                                                        
-            <label>{{ ucfirst(trans('messages.'.$field['title'])) }} {{ $field['required'] ? '*' : '' }}</label>
-            <textarea name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} rows="{{ @$field['rows'] }}">{{ @$item->{$field['field']} }}</textarea>
-        </div>
+    <?php if($field['type'] == 'textarea' || $field['type'] == 'editor') { ?>
+        <!-- textarea / editor ck-->
+        <?php if(@$field['translate']) { ?>
+            <div class="form-group">
+                <label>{{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $field['required'] ? '*' : '' }}</label>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#tab_{{ $field['field'] }}_default" data-toggle="tab" aria-expanded="false" id="li-text-area">                
+                            Default {{ $field['required'] ? '*' : '' }}
+                        </a>
+                    </li>
+                    @foreach($languages as $language)
+                        <li>
+                            <a class="nav-link" href="#tab_{{ $field['field'] }}_{{ $language->id }}" data-toggle="tab" aria-expanded="false" id="li-text-area">
+                                {{ ucfirst($language->language) }} {{ $field['translationsRequired'] ? '*' : '' }}
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>    
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab_{{ $field['field'] }}_default">
+                        <div class="form-group">                            
+                            <textarea name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} rows="{{ @$field['rows'] }}" data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}">{{ @$item->{$field['field']} }}</textarea>
+                        </div>
+                    </div>
+                    <?php                                            
+                        if($item) {
+                            $method = $field['translations'];
+                            $translations = $controller::$method($field['field'], @$item, @$item->id);
+                        }
+                    ?>
+                    @foreach($languages as $language)
+                        <div class="tab-pane" id="tab_{{ $field['field'] }}_{{ $language->id }}">
+                            <div class="form-group">                                
+                                <textarea name="{{ $field['field'] }}_{{ $language->id }}" id="{{ $field['field'] }}_{{ $language->id }}" class="form-control {{ $field['translationsRequired'] ? 'frm-item-required' : '' }}" {{ $field['translationsRequired'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} rows="{{ @$field['rows'] }}" data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}  ({{ $language->id }})">{{ @$translations[$language->id] }}</textarea>
+                            </div>
+                        </div>
+                    @endforeach                    
+                </div>     
+            </div>
+        <?php } else { ?>
+            <div class="form-group">
+                <label>{{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $field['required'] ? '*' : '' }}</label>
+                <textarea name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} rows="{{ @$field['rows'] }}" data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}">{{ @$item->{$field['field']} }}</textarea>
+            </div>
+        <?php } ?>        
     <?php } ?>                                            
+    <?php
+    /*
     <?php if($field['type'] == 'editor') { ?>
         <!-- editor -->            
         <div class="form-group">                                                                                                        
             <label>{{ ucfirst(trans('messages.'.$field['title'])) }} {{ $field['required'] ? '*' : '' }}</label>
-            <textarea name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }}><?php echo @$item->{$field['field']}; ?></textarea>
+            <textarea name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}"><?php echo @$item->{$field['field']}; ?></textarea>
         </div>
     <?php } ?>                                            
+    */ ?>
     <?php if($field['type'] == 'select') { ?>
         <!-- select -->
         <?php 
@@ -106,7 +188,7 @@
         ?>
         <div class="form-group">
             <label>{{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $field['required'] ? '*' : '' }}</label>
-            <select name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }}>
+            <select name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}">
                 <option value="">{{ ucfirst(trans('messages.select-option')) }}</option>
                 <?php foreach($options as $optionKey => $optionValue) { ?>
                     <option value="{{ $optionKey }}" <?php echo $optionKey ==  @$item->{$field['field']} ? 'selected' : ''; ?>>{{ ucfirst($optionValue) }}</option>
@@ -122,7 +204,7 @@
         ?>
         <div class="form-group">
             <label>{{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $field['required'] ? '*' : '' }}</label>
-            <select name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }}>
+            <select name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}">
                 <option value="">{{ ucfirst(trans('messages.select-option')) }}</option>
                 <?php foreach($options as $optionKey => $optionValue) { ?>
                     <option value="{{ $optionKey }}" <?php echo $optionKey ==  @$item->{$field['field']} ? 'selected' : ''; ?>>{{ ucfirst($optionValue) }}</option>
@@ -164,7 +246,7 @@
         ?>
         <div class="form-group">
             <label>{{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $field['required'] ? '*' : '' }}</label>
-            <select name="{{ $field['field'] }}[]" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} multiple="true">
+            <select name="{{ $field['field'] }}[]" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} multiple="true" data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}">
                 <?php foreach($options['all'] as $optionKey => $optionValue) { ?>
                     <option style="padding:5px" value="{{ $optionKey }}" <?php echo array_key_exists($optionKey, $options['selected']) ? 'selected' : ''; ?>>{{ ucfirst($optionValue) }}</option>
                 <?php } ?>
@@ -172,7 +254,7 @@
         </div>
     <?php } ?>
     <?php if($field['type'] == 'checkbox-multiple') { ?>
-        <!-- select multiple -->
+        <!-- checkbox multiple -->
         <?php 
             $method = $field['selector'];                                                    
             $options = $controller::$method(@$item, @$id);
@@ -180,7 +262,7 @@
         <div class="form-group">
             <label>{{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $field['required'] == 'required' ? '*' : '' }}</label>
             <?php foreach($options['all'] as $optionKey => $optionValue) { ?>
-                <br /><input type="checkbox" name="{{ $field['field'] }}[]" id="{{ $field['field'] }}" style="padding:5px" value="{{ $optionKey }}" <?php echo array_key_exists($optionKey, $options['selected']) ? 'checked' : ''; ?>> {{ ucfirst($optionValue) }}
+                <br /><input type="checkbox" name="{{ $field['field'] }}[]" id="{{ $field['field'] }}" style="padding:5px" value="{{ $optionKey }}" <?php echo array_key_exists($optionKey, $options['selected']) ? 'checked' : ''; ?> data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}"> {{ ucfirst($optionValue) }}
             <?php } ?>
         </div>
     <?php } ?>

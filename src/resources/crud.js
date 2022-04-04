@@ -8,7 +8,7 @@ crud = {
             language: {
                 url: "/js/datatables/i18n/"+app.locale+".json",
             },
-            pageLength : 25,
+            pageLength : 10,
             stateSave: true,
             initComplete: function () {
                             	
@@ -23,7 +23,7 @@ crud = {
                         var column = this;
                         var searchable = $(column.footer()).attr('data-searchable');
 
-                        if(searchable == "true") {     
+                        if(searchable == "true" || searchable == true) {
 
                             var input = document.createElement('input');
                             input.setAttribute('class', 'form-control');

@@ -157,12 +157,14 @@
             };
             <?php foreach($editors as $editor) { ?>
                 CKEDITOR.replace('{{ $editor['field'] }}',options);
-                <?php if($editor['translate']) { ?>
-                    <?php foreach($languages as $language) { ?>
-                        CKEDITOR.replace('{{ $editor['field'] }}_{{ $language->id }}',options);
-                    <?php } ?>                
-                <?php } ?>                
-            <?php } ?>                    
+                <?php if(array_key_exists('translate', $editor)) { ?>
+                    <?php if($editor['translate']) { ?>
+                        <?php foreach($languages as $language) { ?>
+                            CKEDITOR.replace('{{ $editor['field'] }}_{{ $language->id }}',options);
+                        <?php } ?>
+                    <?php } ?>
+                <?php } ?>
+            <?php } ?>
         <?php } ?>
 
         function selectPopUpOption(field, key) {

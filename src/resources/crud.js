@@ -87,7 +87,20 @@ crud = {
         // capture select all
         $(document).on('click', '.select-all-btn',  function() {            
             crud.selectAll($(this));
-        });  
+        });
+
+        // capture select one
+        $(document).on('click', '.selector',  function() {            
+            var id = $(this).attr('id');
+            var datatable = $(this).attr('data-table');            
+            var index = $.inArray(id, crud.tables[datatable].selected);
+            if ( index === -1 ) {
+                crud.tables[datatable].selected.push(id);
+            } 
+            else {
+                crud.tables[datatable].selected.splice( index, 1 );
+            }
+        });
 
     },
     formRequireds: function(frm) {        
@@ -138,7 +151,7 @@ crud = {
         else {
             alerts.show('ko', i18n.t('nothing to export'));
         }
-    },
+    },    
     selectAll: function(obj) {
         var url = obj.attr('data-url');
         var datatable = obj.attr('data-datatable');
@@ -170,7 +183,7 @@ crud = {
             });
         }
     },
-    toggleEnable: function(obj) {        
+    toggleEnable: function(obj) {
         var id = obj.attr('data-id');
         var url = obj.attr('data-url');
         var datatable = obj.attr('data-datatable');
@@ -178,7 +191,7 @@ crud = {
         $.ajax({
             method: "post",
             url: "/"+url+"/"+id+"/toggle-enable",
-            success: function(data) {                    
+            success: function(data) {
                 if (data.success) {
                     alerts.show('ok', data.message);
                 }

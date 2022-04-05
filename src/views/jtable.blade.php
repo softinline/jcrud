@@ -70,7 +70,7 @@
                     <thead>
                         <tr>
                             <?php if($list['actions']['selector']) { ?>
-                                <th><input type="checkbox" id="chk-select-all" name="chk-select-all" /></th>
+                                <th><input type="checkbox" id="chk-select-all" name="chk-select-all" class="select-all-btn" data-datatable="{{ $list['name'] }}" data-url="{{ $config['url'] }}" /></th>
                             <?php } ?>
                             <?php foreach($list['cols'] as $col) { ?>
                                 <?php         
@@ -189,23 +189,6 @@
                 @if(array_key_exists('extra', $list))
                     @include($list['extra'])
                 @endif
-            });        
-            
-            <?php if($list['actions']['selector']) { ?>
-                                
-                // selector / unselector change class and add to array
-                $(document).on('click', '.selector', function () {
-                    var id = this.id;
-                    var index = $.inArray(id, crud.tables["{{ $list['name'] }}"].selected);
-                    if ( index === -1 ) {
-                        crud.tables["{{ $list['name'] }}"].selected.push(id);
-                    } 
-                    else {
-                        crud.tables["{{ $list['name'] }}"].selected.splice( index, 1 );
-                    }
-                });
-                
-            <?php } ?>
-                                
+            });                                                                
     </script>
 @stop

@@ -92,7 +92,7 @@ crud = {
         // capture select one
         $(document).on('click', '.selector',  function() {            
             var id = $(this).attr('id');
-            var datatable = $(this).attr('data-table');            
+            var datatable = $(this).attr('data-datatable');            
             var index = $.inArray(id, crud.tables[datatable].selected);
             if ( index === -1 ) {
                 crud.tables[datatable].selected.push(id);

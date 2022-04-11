@@ -80,9 +80,14 @@ crud = {
         });
 
         // capture delete click event on row
+        $(document).on('change', '.crud-toogle-enabled',  function() {
+            crud.toggleEnable($(this));
+        });
+
+        // capture delete click event on row
         $(document).on('click', '.delete',  function() {
             crud.delete($(this));
-        });            
+        });
 
         // capture select all
         $(document).on('click', '.select-all-btn',  function() {            

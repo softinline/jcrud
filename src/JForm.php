@@ -115,6 +115,14 @@
             // redirects url                                            
             $redirectOk = $config['url'];
             $redirectKo = $config['url'];
+
+            // set if redirects to back
+            $redirectBack = false;
+            if(array_key_exists('redirect', $config['forms'][$form])) {
+                if($config['forms'][$form]['redirect'] == 'back') {
+                    $redirectBack = true;
+                }
+            }
             
             // create or update message
             $msg = is_null($id) ? 'created' : 'updated';
@@ -131,10 +139,10 @@
                     if(array_key_exists('action', $config['forms'])) {
                         $method = '_'.$config['forms']['action'];                            
                     }
-                                                                                            
+                                                  
                     // execute
                     $result = $this->_controller::$method($this->_item, $this->_id);
-                                                            
+                                                                                
                     if($result) {
 
                         \DB::commit();
@@ -150,9 +158,15 @@
 
                         }
                         else {
-                            
-                            \Session::flash('flash_message', ucfirst(trans('messages.'.$msg.'_ok')));
-                            return \Redirect::to($redirectOk);
+
+                            \Session::flash('message_success', ucfirst(trans('messages.'.$msg.'_ok')));
+
+                            if($redirectBack) {
+                                return \Redirect::back();
+                            }
+                            else {                                
+                                return \Redirect::to($redirectOk);
+                            }
                                                             
                         }
             
@@ -170,10 +184,21 @@
 
                         }
                         else {
-                                                            
-                            return \Redirect::to($redirectKo)
-                                ->withInput()
-                                ->with('message', ucfirst(trans('messages.'.$msg.'_error')));
+
+                            \Session::flash('message_error', ucfirst(trans('messages.'.$msg.'_error')));
+                                                  
+                            if($redirectBack) {
+
+                                return \Redirect::back()
+                                    ->withInput();
+
+                            }
+                            else {
+
+                                return \Redirect::to($redirectKo)
+                                    ->withInput();
+
+                            }
                             
                         }
 
@@ -197,9 +222,20 @@
                     }
                     else {
 
-                        return \Redirect::to($redirectKo)
-                            ->withInput()
-                            ->with('message', ucfirst(trans('messages.'.$msg.'_error')));
+                        \Session::flash('message_error', ucfirst(trans('messages.'.$msg.'_error')));
+                        
+                        if($redirectBack) {
+                            
+                            return \Redirect::back()
+                                ->withInput();
+                                
+                        }
+                        else  {
+
+                            return \Redirect::to($redirectKo)
+                                ->withInput();
+
+                        }
 
                     }
 
@@ -221,7 +257,7 @@
 
                     return \Redirect::to($redirectKo)
                         ->withInput()
-                        ->with('message', $validator->errors()->first());
+                        ->with('message_error', $validator->errors()->first());
 
                 }
 

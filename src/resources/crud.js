@@ -215,28 +215,39 @@ crud = {
     },
     delete: function(obj) {        
         var id = obj.attr('data-id');
+        var url = obj.attr('data-url');        
+        var title = obj.attr('data-title');
+        if (typeof Swal === 'object' || typeof Swal === 'function') {
+            swal.promptCrudDelete('delete', i18n.t('are you sure to delete') + ' ['+title+'] #'+id+'?', 'warning', 'accept', true, obj);
+        }
+        else {
+            var bConfirm = confirm(i18n.t('are you sure to delete') + ' ['+title+'] #'+id+'?');
+            if(bConfirm) {
+                crud.deleteExec(obj);
+            }
+        }
+    },
+    deleteExec:function(obj) {
+        var id = obj.attr('data-id');
         var url = obj.attr('data-url');
         var datatable = obj.attr('data-datatable');
-        var bConfirm = confirm(i18n.t('are you sure to delete') + ' ['+url+'] #'+id+'?');
-        if(bConfirm) {
-            $("body").LoadingOverlay('show');
-            $.ajax({
-                method: "post",
-                url: "/"+url+"/"+id+"/delete",
-                success: function(data) {                    
-                    if (data.success) {
-                        alerts.show('ok', data.message);
-                    }
-                    else{
-                        alerts.show('ko', data.message);
-                    }
-                },
-                complete: function() {
-                    $("body").LoadingOverlay('hide');
-                    crud.tables[datatable].datatable.ajax.reload(null, false);
+        $("body").LoadingOverlay('show');
+        $.ajax({
+            method: "post",
+            url: "/"+url+"/"+id+"/delete",
+            success: function(data) {                    
+                if (data.success) {
+                    alerts.show('ok', data.message);
                 }
-            });
-        }
+                else{
+                    alerts.show('ko', data.message);
+                }
+            },
+            complete: function() {
+                $("body").LoadingOverlay('hide');
+                crud.tables[datatable].datatable.ajax.reload(null, false);
+            }
+        });
     },
     submit: function(frm) {
         if(typeof CKEDITOR != undefined && typeof CKEDITOR != 'undefined') {

@@ -80,7 +80,7 @@ crud = {
         });
 
         // capture delete click event on row
-        $(document).on('change', '.crud-toogle-enabled',  function() {
+        $(document).on('change', '.crud-toggle-enabled',  function() {
             crud.toggleEnable($(this));
         });
 

@@ -229,7 +229,7 @@ crud = {
 
         // check prompt using swal or alert
         if (typeof Swal === 'object' || typeof Swal === 'function') {
-            swal.promptCrudDelete('delete',  message, 'warning', 'accept', true, obj);
+            swal.promptCrudDelete(i18n.t('delete'),  message, 'warning', i18n.t('accept'), true, obj);
         }
         else {
             var bConfirm = confirm(message);

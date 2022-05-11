@@ -156,7 +156,7 @@ crud = {
         else {
             alerts.show('ko', i18n.t('nothing to export'));
         }
-    },    
+    },
     selectAll: function(obj) {
         var url = obj.attr('data-url');
         var datatable = obj.attr('data-datatable');
@@ -213,19 +213,31 @@ crud = {
             }
         });
     },
-    delete: function(obj) {        
+    delete: function(obj) {    
+        
+        // get data
         var id = obj.attr('data-id');
         var url = obj.attr('data-url');        
         var title = obj.attr('data-title');
+
+        // create the message
+        var message = i18n.t('are you sure to delete');
+        if(title != 'undefined' && title != undefined) {
+            message = message + ' ['+title+']';
+        }
+        message = message + ' #'+id;
+
+        // check prompt using swal or alert
         if (typeof Swal === 'object' || typeof Swal === 'function') {
-            swal.promptCrudDelete('delete', i18n.t('are you sure to delete') + ' ['+title+'] #'+id+'?', 'warning', 'accept', true, obj);
+            swal.promptCrudDelete('delete',  message, 'warning', 'accept', true, obj);
         }
         else {
-            var bConfirm = confirm(i18n.t('are you sure to delete') + ' ['+title+'] #'+id+'?');
+            var bConfirm = confirm(message);
             if(bConfirm) {
                 crud.deleteExec(obj);
             }
         }
+
     },
     deleteExec:function(obj) {
         var id = obj.attr('data-id');

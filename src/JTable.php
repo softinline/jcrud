@@ -71,6 +71,7 @@
                 'config' => $config,
                 'list' => $config['lists'][$list],
                 'breadcrumb' => $breadcrumb,
+                'id' => @$this->_id,
             ])->render();
 
         }

@@ -107,7 +107,7 @@
                                         <th></th>
                                     <?php } ?>
                                 <?php } else { ?>
-                                    <th></th>
+                                    <th data-searchable="true"></th>
                                 <?php } ?>
                             <?php } ?>
                         </tfoot>

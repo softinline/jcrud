@@ -100,12 +100,16 @@
                                 <th></th>
                             <?php } ?>
                             <?php foreach($list['cols'] as $col) { ?>
-                                <?php if($col['searchable']) { ?>
-                                    <th data-searchable="true"></th>
+                                <?php if(array_key_exists(['searchable'], $col)) { ?>
+                                    <?php if($col['searchable']) { ?>
+                                        <th data-searchable="true"></th>
+                                    <?php } else { ?>
+                                        <th></th>
+                                    <?php } ?>
                                 <?php } else { ?>
                                     <th></th>
                                 <?php } ?>
-                            <?php } ?>                                                            
+                            <?php } ?>
                         </tfoot>
                     <?php } ?>
                 </table>

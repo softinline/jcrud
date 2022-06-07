@@ -117,9 +117,10 @@
         </div>
     </div>
 @stop
-@section('scripts')
+@section('script')
     @parent
     <script>
+        $(function() {
         
             if(crud.tables["{{ $list['name'] }}"] == undefined || crud.tables["{{ $list['name'] }}"] == 'undefined') {
                 crud.tables["{{ $list['name'] }}"] = Array();
@@ -193,6 +194,8 @@
                 @if(array_key_exists('extra', $list))
                     @include($list['extra'])
                 @endif
-            });                                                                
+            });
+
+        });
     </script>
 @stop

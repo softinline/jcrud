@@ -281,28 +281,74 @@
             <input type="email" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} value="{{ $value }}" data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}">
             <input type="hidden" name="{{ $field['field'] }}_autocomplete" id="{{ $field['field'] }}_autocomplete" value="{{ @$item->{$field['field']} }}"/>
             <script>
-                $("#{{ $field['field'] }}").autocomplete({
-                    source: function( request, response ) {
-                        $.ajax({
-                            url: "{{ $field['autocompleteUrl'] }}",
-                            dataType: "jsonp",
-                            data: {
-                                term: request.term                                
-                            },
-                            success: function(data) {
-                                response(data);
-                            },
-                            complete: function() {                                
-                            }
-                        });
-                    },
-                    minLength: 2,
-                    select: function( event, ui ) {
-                        $("#{{ $field['field'] }}_autocomplete").val(ui.item.id);
-                    }
+                $(function() {
+                    $("#{{ $field['field'] }}").autocomplete({
+                        source: function( request, response ) {
+                            $.ajax({
+                                url: "{{ $field['autocompleteUrl'] }}",
+                                dataType: "jsonp",
+                                data: {
+                                    term: request.term                                
+                                },
+                                success: function(data) {
+                                    response(data);
+                                },
+                                complete: function() {                                
+                                }
+                            });
+                        },
+                        minLength: 2,
+                        select: function( event, ui ) {
+                            $("#{{ $field['field'] }}_autocomplete").val(ui.item.id);
+                        }
+                    });
                 });
             </script>
         </div>
+    <?php } ?>
+    <?php if($field['type'] == 'image') { ?>
+        <div class="form-group">
+            <label>{{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $field['required'] ? '*' : '' }}</label>
+            <input type="file" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="{{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} value="{{ @$item->{$field['field']} }}" data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}"  accept="image/*">
+            <br />
+            <br />
+            <canvas style="width:{{ $field['width'] }}px; height:auto;"></canvas>
+        </div>                
+
+        <script>
+
+            $(function() {
+
+                var input = document.querySelector('input[id={{ $field['field'] }}]');
+                input.onchange = function () {
+                    var file = input.files[0];
+                    drawOnCanvas(file);
+                };
+            });
+              
+            function drawOnCanvas(file) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var dataURL = e.target.result,
+                    c = document.querySelector('canvas'),
+                    ctx = c.getContext('2d'),
+                    img = new Image();
+    
+                    img.onload = function() {                        
+                        c.width = img.width;
+                        c.height = img.height;
+                        ctx.drawImage(img, 0, 0);
+                    };
+    
+                    img.src = dataURL;
+                };
+ 
+                reader.readAsDataURL(file);
+            }
+                            
+        </script>
+    <?php } ?>
+    <?php if($field['type'] == 'camera') { ?>
     <?php } ?>
     <?php if($field['type'] == 'view') { ?>
         <!-- view -->
@@ -315,16 +361,18 @@
     <?php if(array_key_exists('childrens', $field)) { ?>
         <?php foreach($field['childrens'] as $children) { ?>
             <script>
-                $("#{{ $field['field'] }}").on('change', function() {                
-                    <?php if($field['type'] == 'checkbox') { ?>
-                        var value = $('input[name="{{ $field['field'] }}"]:checked').length > 0;
-                    <?php } else { ?>
-                        var value = $("#{{ $field['field'] }}").val();
-                    <?php } ?>                
-                    $("#div-{{ $field['field'] }}-{{ $children['value'] }}").hide();
-                    if(value == '{{ $children['value'] }}') {
-                        $("#div-{{ $field['field'] }}-{{ $children['value'] }}").toggle('slow');
-                    }
+                $(function() {
+                    $("#{{ $field['field'] }}").on('change', function() {                
+                        <?php if($field['type'] == 'checkbox') { ?>
+                            var value = $('input[name="{{ $field['field'] }}"]:checked').length > 0;
+                        <?php } else { ?>
+                            var value = $("#{{ $field['field'] }}").val();
+                        <?php } ?>                
+                        $("#div-{{ $field['field'] }}-{{ $children['value'] }}").hide();
+                        if(value == '{{ $children['value'] }}') {
+                            $("#div-{{ $field['field'] }}-{{ $children['value'] }}").toggle('slow');
+                        }
+                    });
                 });
             </script>
             <?php 

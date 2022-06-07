@@ -144,27 +144,29 @@
         </div>
     </div>
 @endsection
-@section('scripts')
+@section('script')
     @parent
     <script>
         <?php if(count($editors) > 0) { ?>                
-            // ckeditor
-            var options = {
-                skin:'kama',         
-                enterMode: CKEDITOR.ENTER_BR,
-                shiftEnterMode: CKEDITOR.ENTER_BR,
-                /*extraPlugins:'justify',*/
-            };
-            <?php foreach($editors as $editor) { ?>
-                CKEDITOR.replace('{{ $editor['field'] }}',options);
-                <?php if(array_key_exists('translate', $editor)) { ?>
-                    <?php if($editor['translate']) { ?>
-                        <?php foreach($languages as $language) { ?>
-                            CKEDITOR.replace('{{ $editor['field'] }}_{{ $language->id }}',options);
+            $(function() {
+                // ckeditor
+                var options = {
+                    skin:'kama',         
+                    enterMode: CKEDITOR.ENTER_BR,
+                    shiftEnterMode: CKEDITOR.ENTER_BR,
+                    /*extraPlugins:'justify',*/
+                };
+                <?php foreach($editors as $editor) { ?>
+                    CKEDITOR.replace('{{ $editor['field'] }}',options);
+                    <?php if(array_key_exists('translate', $editor)) { ?>
+                        <?php if($editor['translate']) { ?>
+                            <?php foreach($languages as $language) { ?>
+                                CKEDITOR.replace('{{ $editor['field'] }}_{{ $language->id }}',options);
+                            <?php } ?>
                         <?php } ?>
                     <?php } ?>
                 <?php } ?>
-            <?php } ?>
+            });
         <?php } ?>
 
         function selectPopUpOption(field, key) {

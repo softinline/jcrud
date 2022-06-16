@@ -149,6 +149,9 @@
     <script>
         <?php if(count($editors) > 0) { ?>                
             $(function() {
+                if(!window.CKEDITOR) {
+                    alert('CKEditor not found!');
+                }                
                 // ckeditor
                 var options = {
                     skin:'kama',         
@@ -167,12 +170,6 @@
                     <?php } ?>
                 <?php } ?>
             });
-        <?php } ?>
-
-        function selectPopUpOption(field, key) {
-            $(".selectable-row").removeClass('selectable-row-selected');
-            $("#"+field).val(key);
-            $("#selectable-row-"+key).addClass('selectable-row-selected');
-        }
+        <?php } ?>        
     </script>
 @endsection

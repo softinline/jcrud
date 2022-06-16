@@ -1,5 +1,8 @@
 crud = {
+    
     tables: Array(),
+    
+    mapBoxAccessToken: null,    
     
     init:function() {
         
@@ -303,5 +306,10 @@ crud = {
                 $("#"+frm).submit();
             }
         }      
+    },
+    selectPopUpOption: function(field, key) {
+        $(".selectable-row").removeClass('selectable-row-selected');
+        $("#"+field).val(key);
+        $("#selectable-row-"+key).addClass('selectable-row-selected');
     }
 }

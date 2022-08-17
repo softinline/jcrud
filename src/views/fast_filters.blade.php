@@ -9,6 +9,6 @@
         }
     ?>
     <div class="crud-fast-filter-element">
-        {{ $kParam }} = {{ $vParam }} <a href="{{ url()->current().$queryString }}">[x]</a>
+        {{ $kParam }} = {{ $vParam }} <a href="{{ \Request::root().'/'.$ajax.\Request::path().$queryString }}">[x]</a>
     </div>
 <?php } ?>

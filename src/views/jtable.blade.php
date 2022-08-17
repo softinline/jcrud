@@ -19,6 +19,7 @@
             <div class="col-lg-12">
                 @include('softinline::fast_filters', [                    
                     'list' => $list,                    
+                    'ajax' => $ajax,
                 ])
             </div>
         </div>

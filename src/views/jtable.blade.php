@@ -14,6 +14,15 @@
     'breadcrumb' => $breadcrumb
 ])
 @section('body')
+    <?php if(@$list['fastFilters']) { ?>
+        <div class="row">
+            <div class="col-lg-12">
+                @include('softinline::fast_filters', [                    
+                    'list' => $list,                    
+                ])
+            </div>
+        </div>
+    <?php } ?>
     <div class="row">
         <div class="col-lg-12 text-right">
             <?php if($list['actions']['selector']) { ?>

@@ -14,18 +14,30 @@
     'breadcrumb' => $breadcrumb
 ])
 @section('body')
-    <?php if(@$list['fastFilters']) { ?>
+    <?php if(@$list['subLists']) { ?>
         <div class="row">
             <div class="col-lg-12">
-                @include('softinline::fast_filters', [                    
+                @include('softinline::sublists', [                    
                     'list' => $list,                    
                     'ajax' => $ajax,
                 ])
             </div>
         </div>
-    <?php } ?>
+    <?php } ?>    
     <div class="row">
-        <div class="col-lg-12 text-right">
+        <div class="col-lg-4">
+            <?php if(@$list['fastFilters']) { ?>
+                <div class="row">
+                    <div class="col-lg-12">
+                        @include('softinline::fast_filters', [                    
+                            'list' => $list,                    
+                            'ajax' => $ajax,
+                        ])
+                    </div>
+                </div>
+            <?php } ?>
+        </div>
+        <div class="col-lg-8 text-right">
             <?php if($list['actions']['selector']) { ?>
                 <a href="javascript:void(0)" class="btn btn-primary {{ @$config['btnStyles'] }} select-all-btn" data-datatable="{{ $list['name'] }}" data-url="{{ $config['url'] }}"><i class="fa fa-check"></i> {{ ucfirst(trans('messages.select-all')) }}</a>
             <?php } ?>

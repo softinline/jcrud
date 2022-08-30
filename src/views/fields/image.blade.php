@@ -3,11 +3,11 @@
     <input type="file" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="{{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} value="{{ @$item->{$field['field']} }}" data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}"  accept="image/*">
     <br />
     <?php if(array_key_exists('show', $field)) { ?>
-    <?php
-        $method = $field['show'];
-        $show = $controller::$method(@$item, @$id);
-    ?>
-    <?php echo $show; ?>
+        <?php
+            $method = $field['show'];
+            $show = $controller::$method(@$item, @$id);
+        ?>
+        <?php echo $show; ?>
     <?php } ?>
     <br />
     <canvas id="canvas-{{ $field['field'] }}" style="width:{{ $field['width'] }}px; height:auto;"></canvas>

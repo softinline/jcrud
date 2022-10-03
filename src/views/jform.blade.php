@@ -143,9 +143,6 @@
             </div>
         </div>
     </div>
-@endsection
-@section('script')
-    @parent
     <script>
         <?php if(count($editors) > 0) { ?>                
             $(function() {

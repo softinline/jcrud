@@ -161,7 +161,7 @@
                     <?php if(array_key_exists('translate', $editor)) { ?>
                         <?php if($editor['translate']) { ?>
                             <?php foreach($languages as $language) { ?>
-                                CKEDITOR.replace('{{ $editor['field'] }}_{{ $language->id }}',options);
+                                CKEDITOR.replace('{{ $editor['field'] }}_{{ $language->iso }}',options);
                             <?php } ?>
                         <?php } ?>
                     <?php } ?>

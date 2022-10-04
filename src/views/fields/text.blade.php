@@ -9,7 +9,7 @@
             </li>
             @foreach($languages as $language)
                 <li>
-                    <a class="nav-link" href="#tab_{{ $field['field'] }}_{{ $language->id }}" data-toggle="tab" aria-expanded="false" id="li-text-area">
+                    <a class="nav-link" href="#tab_{{ $field['field'] }}_{{ $language->iso }}" data-toggle="tab" aria-expanded="false" id="li-text-area">
                         {{ ucfirst($language->language) }} {{ $field['translationsRequired'] ? '*' : '' }}
                     </a>
                 </li>
@@ -28,9 +28,9 @@
                 }
             ?>                    
             @foreach($languages as $language)
-                <div class="tab-pane" id="tab_{{ $field['field'] }}_{{ $language->id }}">
+                <div class="tab-pane" id="tab_{{ $field['field'] }}_{{ $language->iso }}">
                     <div class="form-group">                                
-                        <input type="text" name="{{ $field['field'] }}_{{ $language->id }}" id="{{ $field['field'] }}_{{ $language->id }}" class="form-control {{ $field['translationsRequired'] ? 'frm-item-required' : '' }}" {{ $field['translationsRequired'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} value="{{ @$translations[$language->id] }}" data-title="{{ ucfirst(trans('messages.'.$field['title'])) }} ({{ $language->id }})">
+                        <input type="text" name="{{ $field['field'] }}_{{ $language->iso }}" id="{{ $field['field'] }}_{{ $language->iso }}" class="form-control {{ $field['translationsRequired'] ? 'frm-item-required' : '' }}" {{ $field['translationsRequired'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} value="{{ @$translations[$language->iso] }}" data-title="{{ ucfirst(trans('messages.'.$field['title'])) }} ({{ $language->iso }})">
                     </div>
                 </div>
             @endforeach                    

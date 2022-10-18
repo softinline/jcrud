@@ -1,6 +1,6 @@
 <?php   
     // wrapper extends
-    $wrapper = !$form['wrapper'] ? 'softinline::jform_wrapper' : $form['wrapper'];
+    $wrapper = !$form['wrapper'] ? 'softinline::jform-wrapper' : $form['wrapper'];
 
     $query = http_build_query(\Request::all());
     if($query != '') {
@@ -117,8 +117,12 @@
                                                 <?php } ?>
                                             <?php } ?>
                                         </div>
-                                        <div class="card-footer">
-                                            <button type="button" name="btn-submit" id="btn-submit" class="btn btn-primary {{ @$config['btnStyles'] }}" onclick="crud.submit('{{ $frmName }}')"><i class="loading"></i> {{ ucfirst(trans('messages.accept')) }}</button>
+                                        <div class="card-footer">                                            
+                                            <?php if(array_key_exists('optionsPostSave', $form)) { ?>
+                                                <button type="button" name="btn-submit-options-post-save" id="btn-submit-options-post-save" class="btn btn-primary {{ @$config['btnStyles'] }}" onclick="crud.submitSelectOptionPostSave()"><i class="loading"></i> {{ ucfirst(trans('messages.accept')) }}</button>
+                                            <?php } else { ?>
+                                                <button type="button" name="btn-submit" id="btn-submit" class="btn btn-primary {{ @$config['btnStyles'] }}" onclick="crud.submit('{{ $frmName }}')"><i class="loading"></i> {{ ucfirst(trans('messages.accept')) }}</button>
+                                            <?php } ?>
                                             <?php foreach($tab['extraButtons'] as $extraButton) { ?>
                                                 <button type="button" class="btn btn-primary {{ @$config['btnStyles'] }}" onclick="{{ $extraButton[1] }}('{{ @$item->id }}')"> {{ ucfirst(trans('messages.'.$extraButton[0])) }}</button>
                                             <?php } ?>
@@ -126,6 +130,16 @@
                                         </div>
                                     </div>
                                     <input type="hidden" name="tab" id="tab" value="{{ $tab['key'] }}" />                                
+                                    <input type="hidden" name="optionsPostSave" id="optionsPostSave" value="" />
+                                    <?php
+                                        $params = \Request::all();
+                                        $counter = count($params);
+                                    ?>
+                                    <?php if($counter > 0) { ?>
+                                        <?php foreach($params as $kParam => $vParam) { ?>
+                                            <input type="hidden" name="{{ $kParam }}" id="{{ $kParam }}" value="{{ $vParam }}" />
+                                        <?php } ?>
+                                    <?php } ?>
                                 </form>
                             <!-- view -->
                             <?php } elseif($tab['type'] == 'view') { ?>                                
@@ -143,13 +157,46 @@
             </div>
         </div>
     </div>
+    
+    <?php // prepare modal for options post save ?>
+    <?php if(array_key_exists('optionsPostSave', $form)) { ?>
+        <div class="modal" tabindex="-1" role="dialog" id="modal-options-post-save">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{ ucfirst(trans('messages.select-post-option')) }} </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- default option for save -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <button type="button" name="btn-submit" id="btn-submit" class="btn btn-primary btn-block {{ @$config['btnStyles'] }}" onclick="crud.submit('{{ $frmName }}')"><i class="loading"></i> {{ ucfirst(trans('messages.accept')) }}</button>
+                            </div>
+                        </div>
+                        <!-- other options -->
+                        <?php foreach($form['optionsPostSave'] as $optionPostSaveKey => $optionPostSaveValue) { ?>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <button type="button" class="btn btn-secondary btn-block {{ @$config['btnStyles'] }}" onclick="$('#optionsPostSave').val('{{ $optionPostSaveValue[0] }}'); crud.submit('{{ $frmName }}')"><i class="{{ $optionPostSaveValue[2] }}"></i> {{ trans('messages.'.$optionPostSaveValue[1]) }}</button>
+                                </div>
+                            </div>
+                        <?php } ?>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+    <?php } ?>
+
+    <?php // add ckeditors if one found ?>
     <script>
         <?php if(count($editors) > 0) { ?>                
             $(function() {
                 if(!window.CKEDITOR) {
                     alert('CKEditor not found!');
-                }                
-                // ckeditor
+                }
                 var options = {
                     skin:'kama',         
                     enterMode: CKEDITOR.ENTER_BR,

@@ -1,14 +1,25 @@
 <?php
-    $value = @$item->{$field['field']};
-    if($item) {
+    $value = "";
+    $hidden = "";
+    // has item, then show value in db
+    if($item != null) {        
         $method = $field['autocompleteFunction'];
         $value = $controller::$method(@$item, @$id);
+        $hidden = @$item->{$field['field']};
     }
+    // no has item, check if we want a default value
+    else {        
+        if(\Request::get($field['field']) != '') {
+            $method = $field['autocompleteFunction'];            
+            $value = $controller::$method(@$item, @$id, \Request::get($field['field']));
+            $hidden = \Request::get($field['field']);
+        }
+    }    
 ?>
 <div class="form-group">
     <label>{{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $field['required'] ? '*' : '' }} ({{ trans('messages.start_writing_something') }})</label>
-    <input type="email" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} value="{{ $value }}" data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}">
-    <input type="hidden" name="{{ $field['field'] }}_autocomplete" id="{{ $field['field'] }}_autocomplete" value="{{ @$item->{$field['field']} }}"/>
+    <input type="text" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} value="{{ $value }}" data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}">
+    <input type="hidden" name="{{ $field['field'] }}_autocomplete" id="{{ $field['field'] }}_autocomplete" value="{{ $hidden }}"/>
     <script>
         $(function() {
             $("#{{ $field['field'] }}").autocomplete({

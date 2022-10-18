@@ -105,8 +105,8 @@
             'languages' => $languages
         ])
     <?php } ?>
-    <?php if($field['type'] == 'selectPopUp') { ?>
-        <!-- selectPopUp -->
+    <?php if($field['type'] == 'select-popup') { ?>
+        <!-- select popup -->
         @include('softinline::fields.select-popup', [
             'item' => @$item,
             'field' => $field,

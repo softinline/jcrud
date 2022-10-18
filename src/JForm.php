@@ -123,7 +123,7 @@
                     $redirectBack = true;
                 }
             }
-            
+                                    
             // create or update message
             $msg = is_null($id) ? 'created' : 'updated';
                                     
@@ -136,6 +136,7 @@
 
                 try {
 
+                    // set custom action method instead create or update
                     if(array_key_exists('action', $config['forms'])) {
                         $method = '_'.$config['forms']['action'];                            
                     }
@@ -144,6 +145,13 @@
                     $result = $this->_controller::$method($this->_item, $this->_id);
                                                                                 
                     if($result) {
+
+                        // after execute method check if redirectOk must be changed
+                        if(array_key_exists('optionsPostSave', $config['forms'][$form])) {
+                            if(\Request::get('optionsPostSave') != '') {
+                                $redirectOk = $ajax.str_replace('{id}', $result->id, $config['forms'][$form]['optionsPostSave'][\Request::get('optionsPostSave')][3]);
+                            }
+                        }
 
                         \DB::commit();
 
@@ -162,10 +170,14 @@
                             \Session::flash('message_success', ucfirst(trans('messages.'.$msg.'_ok')));
 
                             if($redirectBack) {
+
                                 return \Redirect::back();
+
                             }
-                            else {                                
+                            else {  
+
                                 return \Redirect::to($redirectOk);
+
                             }
                                                             
                         }
@@ -250,7 +262,7 @@
                     return \Response::json([
                         'success' => false,
                         'message' => $validator->errors()->first(),
-                    ], 200);                
+                    ], 200);
 
                 }
                 else {
@@ -281,7 +293,7 @@
 
                         if($field['type'] == 'row' || $field['type'] == 'fieldset') {
 
-                            foreach($field['fields'] as $subfield) { 
+                            foreach($field['fields'] as $subfield) {
 
                                 if($subfield['required'] === 'true' || $subfield['required'] === true ) {
 
@@ -307,12 +319,13 @@
 
                 }
 
-            }             
+            }
 
             // make validator
             $validator = \Validator::make(\Request::all(), $validatorRules);
 
             return $validator;
+
         }
 
         /**
@@ -360,6 +373,7 @@
                         }
                     }
                     else {
+                        
                         if(\Request::ajax()) {
 
                             return \Response::json([

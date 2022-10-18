@@ -1,6 +1,6 @@
 <?php   
     // wrapper extends
-    $wrapper = !$list['wrapper'] ? 'softinline::jtable_wrapper' : $list['wrapper'];
+    $wrapper = !$list['wrapper'] ? 'softinline::jtable-wrapper' : $list['wrapper'];
     
     $query = http_build_query(\Request::all());
     if($query != '') {
@@ -29,7 +29,7 @@
             <?php if(@$list['fastFilters']) { ?>
                 <div class="row">
                     <div class="col-lg-12">
-                        @include('softinline::fast_filters', [                    
+                        @include('softinline::fast-filters', [                    
                             'list' => $list,                    
                             'ajax' => $ajax,
                         ])

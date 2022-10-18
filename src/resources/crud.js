@@ -1,9 +1,12 @@
-crud = {
-    
+crud = {    
+    // tables
+    // array of datatables
     tables: Array(),
-    
+    // mapBoxAccessToken
+    // this is used on mapBox js plugin to set the token key
     mapBoxAccessToken: null,    
-    
+    // init
+    // init crud settings
     init:function() {
         
         // extends datatable
@@ -111,10 +114,11 @@ crud = {
         });
 
     },
+    // formRequireds
+    // check for required elements
     formRequireds: function(frm) {        
         var elements = document.forms[frm].elements;
         for (i=0; i<elements.length; i++) {
-            console.log(elements[i]);
             if(elements[i].classList.contains("frm-item-required")) {
                 if(elements[i].value == '') {
                     alerts.show('ko', elements[i].getAttribute('data-title') + ' ' + i18n.t('is required'));
@@ -125,6 +129,8 @@ crud = {
         }        
         return true;
     },
+    // export
+    // export to excel file
     export: function(obj) {
         var url = $(obj).attr('data-url');
         var datatable = $(obj).attr('data-datatable');        
@@ -160,6 +166,8 @@ crud = {
             alerts.show('ko', i18n.t('nothing to export'));
         }
     },
+    // selectAll
+    // select all elements using sessions in controller stored
     selectAll: function(obj) {
         var url = obj.attr('data-url');
         var datatable = obj.attr('data-datatable');
@@ -191,6 +199,8 @@ crud = {
             });
         }
     },
+    // toggleEnable
+    // enable / disable element using toggle-enable
     toggleEnable: function(obj) {
         var id = obj.attr('data-id');
         var url = obj.attr('data-url');
@@ -216,6 +226,8 @@ crud = {
             }
         });
     },
+    // delete
+    // delete elment using swal if was found of confirm js
     delete: function(obj) {    
         
         // get data
@@ -242,6 +254,8 @@ crud = {
         }
 
     },
+    // deleteExec
+    // execute delete action
     deleteExec:function(obj) {
         var id = obj.attr('data-id');
         var url = obj.attr('data-url');
@@ -264,13 +278,20 @@ crud = {
             }
         });
     },
+    // submitSelectOptionPostSave
+    // if optionsPostSave is used on json defines, show modal for after save action
+    submitSelectOptionPostSave:function() {
+        $("#modal-options-post-save").modal();
+    },
+    // submit
+    // exeucte submit form
     submit: function(frm) {
         if(typeof CKEDITOR != undefined && typeof CKEDITOR != 'undefined') {
             for (var i in CKEDITOR.instances) {
                 CKEDITOR.instances[i].updateElement();
             };
         }
-        if(crud.formRequireds(frm)) {                        
+        if(crud.formRequireds(frm)) {
             var action = $("#"+frm).attr('action');
             var data = new FormData(document.getElementById(frm));
             $("#btn-submit").find('.loading').addClass("fa fa-spinner spin");        
@@ -307,11 +328,15 @@ crud = {
             }
         }      
     },
+    // selectPopUpOption
+    // select popup option when options are displayed on modal
     selectPopUpOption: function(field, key) {
         $(".selectable-row").removeClass('selectable-row-selected');
         $("#"+field).val(key);
         $("#selectable-row-"+key).addClass('selectable-row-selected');
     },
+    // updateQueryStringParameter
+    // update param value or added in url query string param
     updateQueryStringParameter: function(uri, key, value) {
         var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
         var separator = uri.indexOf('?') !== -1 ? "&" : "?";

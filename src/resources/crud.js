@@ -317,9 +317,10 @@ crud = {
                         }
                     },                        
                     complete: function() {
+                        $("#modal-options-post-save").modal('hide');
                         $("body").LoadingOverlay('hide');
                         $("#btn-submit").find('.loading').removeClass("fa fa-spinner spin");        
-                        $("#btn-submit").prop("disabled", false);                
+                        $("#btn-submit").prop("disabled", false);
                     }
                 });
             }

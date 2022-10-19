@@ -178,9 +178,9 @@
                         </div>
                         <!-- other options -->
                         <?php foreach($form['optionsPostSave'] as $optionPostSaveKey => $optionPostSaveValue) { ?>
-                            <div class="row">
+                            <div class="row" style="margin-top:10px">
                                 <div class="col-lg-12">
-                                    <button type="button" class="btn btn-secondary btn-block {{ @$config['btnStyles'] }}" onclick="$('#optionsPostSave').val('{{ $optionPostSaveValue[0] }}'); crud.submit('{{ $frmName }}')"><i class="{{ $optionPostSaveValue[2] }}"></i> {{ trans('messages.'.$optionPostSaveValue[1]) }}</button>
+                                    <button type="button" class="btn btn-secondary btn-block {{ @$config['btnStyles'] }}" onclick="$('#optionsPostSave').val('{{ $optionPostSaveValue[0] }}'); crud.submit('{{ $frmName }}')"><i class="{{ $optionPostSaveValue[2] }}"></i> {{ ucfirst(trans('messages.'.$optionPostSaveValue[1])) }}</button>
                                 </div>
                             </div>
                         <?php } ?>

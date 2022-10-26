@@ -7,7 +7,7 @@
 <br />
 <script>
     $("#jcrud-sublist").on('change', function() {
-        var url = crud.updateQueryStringParameter(window.location.toString(),'jcrudSubList',$(this).val());                
+        var url = jcrud.updateQueryStringParameter(window.location.toString(),'jcrudSubList',$(this).val());                
         window.location = url;        
     });
 </script>

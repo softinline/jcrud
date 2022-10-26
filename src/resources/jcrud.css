@@ -1,0 +1,27 @@
+.jcrud-required {
+    border:2px solid red;
+}
+
+.jcrud-fast-filter-element {
+    background-color:#eee;
+    border:1px solid #ccc;
+    padding:0.25em;
+    border-radius:0.25em;
+    width:max-content;
+}
+
+.jcrud-selectable-row {
+    cursor:pointer;
+    transition:0.3s;
+    padding:0.5rem !important;
+    margin:0 !important;
+}
+
+.jcrud-selectable-row:hover {
+    background-color:#eee;
+}
+
+.jcrud-selectable-row-selected {
+    border:1px solid #ccc;
+    border-radius:5px;
+}

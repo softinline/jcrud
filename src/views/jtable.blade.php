@@ -39,7 +39,7 @@
         </div>
         <div class="col-lg-8 text-right">
             <?php if($list['actions']['selector']) { ?>
-                <a href="javascript:void(0)" class="btn btn-primary {{ @$config['btnStyles'] }} select-all-btn" data-datatable="{{ $list['name'] }}" data-url="{{ $config['url'] }}"><i class="fa fa-check"></i> {{ ucfirst(trans('messages.select-all')) }}</a>
+                <a href="javascript:void(0)" class="btn btn-primary {{ @$config['btnStyles'] }} jcrud-select-all-btn" jcrud-data-datatable="{{ $list['name'] }}" jcrud-data-url="{{ $config['url'] }}"><i class="fa fa-check"></i> {{ ucfirst(trans('messages.select-all')) }}</a>
             <?php } ?>
             <?php if(count($list['options']) > 0) { ?>
                 <div class="btn-group">
@@ -53,7 +53,7 @@
                                     $tmp = explode(':', $listOption[2]);
                                 ?>
                                 <?php if($tmp[0] == 'js') { ?>
-                                    <a href="javascript:void(0)" class="dropdown-item" onclick="{{ $tmp[1] }}(this)" data-url="{{ $config['url'] }}" data-datatable="{{ $list['name'] }}" data-id="{{ @$id }}"><i class="{{ $listOption[1] }}"></i> {{ ucfirst(trans('messages.'.$listOption[0])) }}</a>
+                                    <a href="javascript:void(0)" class="dropdown-item" onclick="{{ $tmp[1] }}(this)" jcrud-data-url="{{ $config['url'] }}" jcrud-data-datatable="{{ $list['name'] }}" jcrud-data-id="{{ @$id }}"><i class="{{ $listOption[1] }}"></i> {{ ucfirst(trans('messages.'.$listOption[0])) }}</a>
                                 <?php } else { ?>
                                     <?php $tmp[1] = str_replace('{id}', @$id, $tmp[1]); ?>
                                     <a href="javascript:void(0)" class="dropdown-item" onclick="window.open('{{ url($tmp[1]) }}','_self')"><i class="{{ $listOption[1] }}"></i> {{ ucfirst(trans('messages.'.$listOption[0])) }}</a>
@@ -65,11 +65,11 @@
             <?php } ?>
             <?php if(array_key_exists('extraActions', $list)) { ?>
                 <?php foreach($extraActions as $extraAction) { ?>
-                    <a href="javascript:void(0)" class="btn btn-primary {{ @$config['btnStyles'] }}" name="{{ $extraAction[3] }}" id="{{ $extraAction[3] }}" onclick="{{ $extraAction[2] }}(this)" data-url="{{ $config['url'] }}" data-datatable="{{ $list['name'] }}"><i class="{{ $extraAction[1] }}"></i> {{ ucfirst(trans('messages.'.$extraAction[0])) }}</a>
+                    <a href="javascript:void(0)" class="btn btn-primary {{ @$config['btnStyles'] }}" name="{{ $extraAction[3] }}" id="{{ $extraAction[3] }}" onclick="{{ $extraAction[2] }}(this)" jcrud-data-url="{{ $config['url'] }}" jcrud-data-datatable="{{ $list['name'] }}"><i class="{{ $extraAction[1] }}"></i> {{ ucfirst(trans('messages.'.$extraAction[0])) }}</a>
                 <?php } ?>
             <?php } ?>
             <?php if($list['actions']['export']) { ?>
-                <a href="javascript:void(0)" class="btn btn-primary {{ @$config['btnStyles'] }}" onclick="crud.export(this)" data-url="{{ $config['url'] }}" data-datatable="{{ $list['name'] }}">
+                <a href="javascript:void(0)" class="btn btn-primary {{ @$config['btnStyles'] }}" onclick="jcrud.export(this)" jcrud-data-url="{{ $config['url'] }}" jcrud-data-datatable="{{ $list['name'] }}">
                     <i class="fa fa-file"></i> {{ ucfirst(trans('messages.export')) }}
                 </a>
             <?php } ?>
@@ -88,11 +88,11 @@
                     // default table class
                     $class = !$list['class'] ? 'table table-hover table-bordered' : $list['class'];
                 ?>
-                <table id="table-crud-{{ $list['name'] }}" class="{{ $class }}" style="width:100%">
+                <table id="table-jcrud-{{ $list['name'] }}" class="{{ $class }}" style="width:100%">
                     <thead>
                         <tr>
                             <?php if($list['actions']['selector']) { ?>
-                                <th><input type="checkbox" id="chk-select-all" name="chk-select-all" class="select-all-btn" data-datatable="{{ $list['name'] }}" data-url="{{ $config['url'] }}" /></th>
+                                <th><input type="checkbox" id="chk-select-all" name="chk-select-all" class="jcrud-select-all-btn" jcrud-data-datatable="{{ $list['name'] }}" jcrud-data-url="{{ $config['url'] }}" /></th>
                             <?php } ?>
                             <?php foreach($list['cols'] as $col) { ?>
                                 <?php         
@@ -106,7 +106,7 @@
                                     }
                                     // options
                                     $options = '';
-                                    if(array_key_exists('options', $col)) {                                
+                                    if(array_key_exists('options', $col)) {
                                         $options = $col['options'];
                                     }
                                 ?>
@@ -124,12 +124,12 @@
                             <?php foreach($list['cols'] as $col) { ?>
                                 <?php if(array_key_exists('searchable', $col)) { ?>
                                     <?php if($col['searchable']) { ?>
-                                        <th data-searchable="true"></th>
+                                        <th jcrud-data-searchable="true"></th>
                                     <?php } else { ?>
                                         <th></th>
                                     <?php } ?>
                                 <?php } else { ?>
-                                    <th data-searchable="true"></th>
+                                    <th jcrud-data-searchable="true"></th>
                                 <?php } ?>
                             <?php } ?>
                         </tfoot>
@@ -144,10 +144,10 @@
     <script>
         $(function() {
         
-            if(crud.tables["{{ $list['name'] }}"] == undefined || crud.tables["{{ $list['name'] }}"] == 'undefined') {
-                crud.tables["{{ $list['name'] }}"] = Array();
-                crud.tables["{{ $list['name'] }}"].datatable = null;
-                crud.tables["{{ $list['name'] }}"].selected = Array();
+            if(jcrud.tables["{{ $list['name'] }}"] == undefined || jcrud.tables["{{ $list['name'] }}"] == 'undefined') {
+                jcrud.tables["{{ $list['name'] }}"] = Array();
+                jcrud.tables["{{ $list['name'] }}"].datatable = null;
+                jcrud.tables["{{ $list['name'] }}"].selected = Array();
             }
         
             <?php                
@@ -165,7 +165,7 @@
 
             ?>
             
-            crud.tables["{{ $list['name'] }}"].datatable = $('#table-crud-{{ $list['name'] }}').DataTable({
+            jcrud.tables["{{ $list['name'] }}"].datatable = $('#table-jcrud-{{ $list['name'] }}').DataTable({
                 "sDom":"<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n        <'table-responsive'tr>\n        <'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
                 /*"sDom": "<'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",*/
                 "stateSave": true,
@@ -177,7 +177,7 @@
                 "pageLength": {{ @$list['pageLength'] != '' ? $list['pageLength'] : 10}},
                 "columns": [
                     <?php if($list['actions']['selector']) { ?>
-                            { data:"selector", name:"selector", orderable:false, searchable:false },
+                        { width:"1%", data:"selector", name:"selector", orderable:false, searchable:false },
                     <?php } ?>
                     <?php foreach($list['cols'] as $col) { ?>
                         <?php
@@ -190,14 +190,14 @@
                                 $searchable = 'false';
                             }
                         ?>
-                        { data: "{{ $col['field'] }}", name: "{{ $col['name'] }}", orderable: {{ $orderable }}, searchable: {{ $searchable }} },
+                        { width:"{{ @$col['width'] }}", data:"{{ $col['field'] }}", name:"{{ $col['name'] }}", orderable:{{ $orderable }}, searchable:{{ $searchable }} },
                     <?php } ?>
                 ],
                 "rowCallback": function( row, data ) {
                     <?php if($list['actions']['selector']) { ?>
                         var id = data.DT_RowId.split('_');    
-                        if ( $.inArray(id[1], crud.tables["{{ $list['name'] }}"].selected) !== -1 ) {
-                            $(row).find('.selector').prop('checked', true);
+                        if ( $.inArray(id[1], jcrud.tables["{{ $list['name'] }}"].selected) !== -1 ) {
+                            $(row).find('.jcrud-selector').prop('checked', true);
                         }
                     <?php } ?>
                     @if($list['rowCallBack']))

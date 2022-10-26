@@ -22,6 +22,14 @@
             'config' => $config
         ])
     <?php } ?>
+    <?php if($field['type'] == 'color') { ?>
+        <!-- color -->
+        @include('softinline::fields.color', [
+            'item' => @$item,
+            'field' => $field,
+            'config' => $config
+        ])
+    <?php } ?>
     <?php if($field['type'] == 'date') { ?>
         <!-- date -->
         @include('softinline::fields.date', [

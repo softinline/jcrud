@@ -4,7 +4,7 @@
 ?>
 <div class="form-group">
     <label>{{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $field['required'] ? '*' : '' }}</label>
-    <select name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}">        
+    <select name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'jcrud-frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} jcrud-data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}">        
         <option value="">{{ ucfirst(trans('messages.select-option')) }}</option>
         <?php foreach($options as $optionKey => $optionValue) { ?>
             <?php

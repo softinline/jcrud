@@ -1,4 +1,4 @@
-crud = {    
+jcrud = {    
     // tables
     // array of datatables
     tables: Array(),
@@ -6,7 +6,7 @@ crud = {
     // this is used on mapBox js plugin to set the token key
     mapBoxAccessToken: null,    
     // init
-    // init crud settings
+    // init jcrud settings
     init:function() {
         
         // extends datatable
@@ -27,7 +27,7 @@ crud = {
                     table.columns().every(function () {    
 
                         var column = this;
-                        var searchable = $(column.footer()).attr('data-searchable');
+                        var searchable = $(column.footer()).attr('jcrud-data-searchable');
 
                         if(searchable == "true" || searchable == true) {
 
@@ -86,44 +86,55 @@ crud = {
         });
 
         // capture delete click event on row
-        $(document).on('change', '.crud-toggle-enabled',  function() {
-            crud.toggleEnable($(this));
+        $(document).on('change', '.jcrud-toggle-enabled',  function() {
+            jcrud.toggleEnable($(this));
         });
 
         // capture delete click event on row
-        $(document).on('click', '.delete',  function() {
-            crud.delete($(this));
+        $(document).on('click', '.jcrud-delete',  function() {
+            jcrud.delete($(this));
         });
 
         // capture select all
-        $(document).on('click', '.select-all-btn',  function() {            
-            crud.selectAll($(this));
+        $(document).on('click', '.jcrud-select-all-btn',  function() {            
+            jcrud.selectAll($(this));
         });
 
         // capture select one
-        $(document).on('click', '.selector',  function() {            
+        $(document).on('click', '.jcrud-selector',  function() {            
             var id = $(this).attr('id');
-            var datatable = $(this).attr('data-datatable');            
-            var index = $.inArray(id, crud.tables[datatable].selected);
+            var datatable = $(this).attr('jcrud-data-datatable');            
+            var index = $.inArray(id, jcrud.tables[datatable].selected);
             if ( index === -1 ) {
-                crud.tables[datatable].selected.push(id);
+                jcrud.tables[datatable].selected.push(id);
             } 
             else {
-                crud.tables[datatable].selected.splice( index, 1 );
+                jcrud.tables[datatable].selected.splice( index, 1 );
             }
         });
 
     },
     // formRequireds
     // check for required elements
-    formRequireds: function(frm) {        
+    formRequireds: function(frm) {
         var elements = document.forms[frm].elements;
         for (i=0; i<elements.length; i++) {
-            if(elements[i].classList.contains("frm-item-required")) {
-                if(elements[i].value == '') {
-                    alerts.show('ko', elements[i].getAttribute('data-title') + ' ' + i18n.t('is required'));
-                    $("#"+elements[i].name).addClass('required');
-                    return false;
+            if(elements[i].classList.contains("jcrud-frm-item-required")) {
+                var process = true;
+                // check parent visibility
+                var elementParent = $(elements[i]).closest('.softinline-jcrud-childrens-div');
+                if(elementParent.length > 0) {
+                    if(!elementParent.is(":visible")) {                        
+                        process = false;
+                    }
+                }
+                // if finally need to check
+                if(process) {                    
+                    if(elements[i].value == '') {                    
+                        alerts.show('ko', elements[i].getAttribute('jcrud-data-title') + ' ' + i18n.t('is required'));
+                        $("#"+elements[i].name).addClass('jcrud-required');
+                        return false;
+                    }
                 }
             }
         }        
@@ -132,16 +143,16 @@ crud = {
     // export
     // export to excel file
     export: function(obj) {
-        var url = $(obj).attr('data-url');
-        var datatable = $(obj).attr('data-datatable');        
-        if(crud.tables[datatable].selected.length > 0) {
-            var bConfirm = confirm(i18n.t('are you sure of export') + ' ' + crud.tables[datatable].selected.length+' '+i18n.t('elements'));
+        var url = $(obj).attr('jcrud-data-url');
+        var datatable = $(obj).attr('jcrud-data-datatable');        
+        if(jcrud.tables[datatable].selected.length > 0) {
+            var bConfirm = confirm(i18n.t('are you sure of export') + ' ' + jcrud.tables[datatable].selected.length+' '+i18n.t('elements'));
             if(bConfirm) {
                 $.ajax({
                     method: "post",
                     url: '/'+url+'/export-selected',
                     data: {
-                        ids: JSON.stringify(crud.tables[datatable].selected),
+                        ids: JSON.stringify(jcrud.tables[datatable].selected),
                     },
                     success: function(data) {
                         if (data.success) {
@@ -169,11 +180,11 @@ crud = {
     // selectAll
     // select all elements using sessions in controller stored
     selectAll: function(obj) {
-        var url = obj.attr('data-url');
-        var datatable = obj.attr('data-datatable');
-        if(crud.tables[datatable].selected.length > 0) {
-            crud.tables[datatable].selected = Array();
-            crud.tables[datatable].datatable.ajax.reload(null, false);
+        var url = obj.attr('jcrud-data-url');
+        var datatable = obj.attr('jcrud-data-datatable');
+        if(jcrud.tables[datatable].selected.length > 0) {
+            jcrud.tables[datatable].selected = Array();
+            jcrud.tables[datatable].datatable.ajax.reload(null, false);
         }
         else {            
             $.ajax({
@@ -182,9 +193,9 @@ crud = {
                 success: function(data) {                    
                     $.each(data.data, function(i, item) {
                         var id = data.data[i].id;
-                        var index = $.inArray(id, crud.tables[datatable].selected); 
+                        var index = $.inArray(id, jcrud.tables[datatable].selected); 
                         if ( index === -1 ) {
-                            crud.tables[datatable].selected.push(id);
+                            jcrud.tables[datatable].selected.push(id);
                         }
                     });                    
                 },
@@ -194,7 +205,7 @@ crud = {
                 },
                 complete: function() {
                     $(".wrapper").LoadingOverlay('hide');
-                    crud.tables[datatable].datatable.ajax.reload(null, false);
+                    jcrud.tables[datatable].datatable.ajax.reload(null, false);
                 }            
             });
         }
@@ -202,9 +213,9 @@ crud = {
     // toggleEnable
     // enable / disable element using toggle-enable
     toggleEnable: function(obj) {
-        var id = obj.attr('data-id');
-        var url = obj.attr('data-url');
-        var datatable = obj.attr('data-datatable');
+        var id = obj.attr('jcrud-data-id');
+        var url = obj.attr('jcrud-data-url');
+        var datatable = obj.attr('jcrud-data-datatable');
         $("body").LoadingOverlay('show');
         $.ajax({
             method: "post",
@@ -222,7 +233,7 @@ crud = {
             },
             complete: function() {
                 $("body").LoadingOverlay('hide');                
-                crud.tables[datatable].datatable.ajax.reload(null, false);
+                jcrud.tables[datatable].datatable.ajax.reload(null, false);
             }
         });
     },
@@ -231,16 +242,16 @@ crud = {
     delete: function(obj) {    
         
         // get data
-        var id = obj.attr('data-id');
-        var url = obj.attr('data-url');        
-        var title = obj.attr('data-title');
+        var id = obj.attr('jcrud-data-id');
+        var url = obj.attr('jcrud-data-url');        
+        var title = obj.attr('jcrud-data-title');
 
         // create the message
         var message = i18n.t('are you sure to delete');
         if(title != 'undefined' && title != undefined) {
             message = message + ' ['+title+']';
         }
-        message = message + ' #'+id;
+        message = message + ' #'+id+'?';
 
         // check prompt using swal or alert
         if (typeof Swal === 'object' || typeof Swal === 'function') {
@@ -249,7 +260,7 @@ crud = {
         else {
             var bConfirm = confirm(message);
             if(bConfirm) {
-                crud.deleteExec(obj);
+                jcrud.deleteExec(obj);
             }
         }
 
@@ -257,9 +268,9 @@ crud = {
     // deleteExec
     // execute delete action
     deleteExec:function(obj) {
-        var id = obj.attr('data-id');
-        var url = obj.attr('data-url');
-        var datatable = obj.attr('data-datatable');
+        var id = obj.attr('jcrud-data-id');
+        var url = obj.attr('jcrud-data-url');
+        var datatable = obj.attr('jcrud-data-datatable');
         $("body").LoadingOverlay('show');
         $.ajax({
             method: "post",
@@ -274,7 +285,7 @@ crud = {
             },
             complete: function() {
                 $("body").LoadingOverlay('hide');
-                crud.tables[datatable].datatable.ajax.reload(null, false);
+                jcrud.tables[datatable].datatable.ajax.reload(null, false);
             }
         });
     },
@@ -285,13 +296,13 @@ crud = {
     },
     // submit
     // exeucte submit form
-    submit: function(frm) {
+    submit:function(frm) {
         if(typeof CKEDITOR != undefined && typeof CKEDITOR != 'undefined') {
             for (var i in CKEDITOR.instances) {
                 CKEDITOR.instances[i].updateElement();
             };
         }
-        if(crud.formRequireds(frm)) {
+        if(jcrud.formRequireds(frm)) {
             var action = $("#"+frm).attr('action');
             var data = new FormData(document.getElementById(frm));
             $("#btn-submit").find('.loading').addClass("fa fa-spinner spin");        
@@ -332,9 +343,9 @@ crud = {
     // selectPopUpOption
     // select popup option when options are displayed on modal
     selectPopUpOption: function(field, key) {
-        $(".selectable-row").removeClass('selectable-row-selected');
+        $(".jcrud-selectable-row").removeClass('jcrud-selectable-row-selected');
         $("#"+field).val(key);
-        $("#selectable-row-"+key).addClass('selectable-row-selected');
+        $("#jcrud-selectable-row-"+key).addClass('jcrud-selectable-row-selected');
     },
     // updateQueryStringParameter
     // update param value or added in url query string param

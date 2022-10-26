@@ -27,7 +27,7 @@
 
     $(function() {
 
-        mapboxgl.accessToken = crud.mapboxAccessToken;
+        mapboxgl.accessToken = jcrud.mapboxAccessToken;
             
         var latitude = "{{ @$item->{$field['latitudeField']} }}";
         var longitude = "{{ @$item->{$field['longitudeField']} }}";

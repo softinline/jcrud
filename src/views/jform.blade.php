@@ -22,7 +22,8 @@
 ])
 @section('body')
     <?php 
-        $editors = [];
+        $editors = [];  // array of elements for editorCK
+        $colors = [];   // array of elements for color picker
     ?>    
     <div class="row">
         <div class="col-lg-12">
@@ -81,6 +82,10 @@
                                                     if ($field['type'] == 'editor') {
                                                         $editors[] = $field;
                                                     }
+                                                    // color
+                                                    if($field['type'] == 'color') {
+                                                        $colors[] = $field;
+                                                    }
                                                 ?>
                                                 <?php if($field['type'] == 'row') { ?>
                                                     <div class="row">
@@ -119,9 +124,9 @@
                                         </div>
                                         <div class="card-footer">                                            
                                             <?php if(array_key_exists('optionsPostSave', $form)) { ?>
-                                                <button type="button" name="btn-submit-options-post-save" id="btn-submit-options-post-save" class="btn btn-primary {{ @$config['btnStyles'] }}" onclick="crud.submitSelectOptionPostSave()"><i class="loading"></i> {{ ucfirst(trans('messages.accept')) }}</button>
+                                                <button type="button" name="btn-submit-options-post-save" id="btn-submit-options-post-save" class="btn btn-primary {{ @$config['btnStyles'] }}" onclick="jcrud.submitSelectOptionPostSave()"><i class="loading"></i> {{ ucfirst(trans('messages.accept')) }}</button>
                                             <?php } else { ?>
-                                                <button type="button" name="btn-submit" id="btn-submit" class="btn btn-primary {{ @$config['btnStyles'] }}" onclick="crud.submit('{{ $frmName }}')"><i class="loading"></i> {{ ucfirst(trans('messages.accept')) }}</button>
+                                                <button type="button" name="btn-submit" id="btn-submit" class="btn btn-primary {{ @$config['btnStyles'] }}" onclick="jcrud.submit('{{ $frmName }}')"><i class="loading"></i> {{ ucfirst(trans('messages.accept')) }}</button>
                                             <?php } ?>
                                             <?php foreach($tab['extraButtons'] as $extraButton) { ?>
                                                 <button type="button" class="btn btn-primary {{ @$config['btnStyles'] }}" onclick="{{ $extraButton[1] }}('{{ @$item->id }}')"> {{ ucfirst(trans('messages.'.$extraButton[0])) }}</button>
@@ -173,14 +178,14 @@
                         <!-- default option for save -->
                         <div class="row">
                             <div class="col-lg-12">
-                                <button type="button" name="btn-submit" id="btn-submit" class="btn btn-primary btn-block {{ @$config['btnStyles'] }}" onclick="crud.submit('{{ $frmName }}')"><i class="loading"></i> {{ ucfirst(trans('messages.accept')) }}</button>
+                                <button type="button" name="btn-submit" id="btn-submit" class="btn btn-primary btn-block {{ @$config['btnStyles'] }}" onclick="jcrud.submit('{{ $frmName }}')"><i class="loading"></i> {{ ucfirst(trans('messages.accept')) }}</button>
                             </div>
                         </div>
                         <!-- other options -->
                         <?php foreach($form['optionsPostSave'] as $optionPostSaveKey => $optionPostSaveValue) { ?>
                             <div class="row" style="margin-top:10px">
                                 <div class="col-lg-12">
-                                    <button type="button" class="btn btn-secondary btn-block {{ @$config['btnStyles'] }}" onclick="$('#optionsPostSave').val('{{ $optionPostSaveValue[0] }}'); crud.submit('{{ $frmName }}')"><i class="{{ $optionPostSaveValue[2] }}"></i> {{ ucfirst(trans('messages.'.$optionPostSaveValue[1])) }}</button>
+                                    <button type="button" class="btn btn-secondary btn-block {{ @$config['btnStyles'] }}" onclick="$('#optionsPostSave').val('{{ $optionPostSaveValue[0] }}'); jcrud.submit('{{ $frmName }}')"><i class="{{ $optionPostSaveValue[2] }}"></i> {{ ucfirst(trans('messages.'.$optionPostSaveValue[1])) }}</button>
                                 </div>
                             </div>
                         <?php } ?>
@@ -190,10 +195,17 @@
         </div>
     <?php } ?>
 
-    <?php // add ckeditors if one found ?>
+    <?php // add extra elements ?>
     <script>
-        <?php if(count($editors) > 0) { ?>                
-            $(function() {
+        $(function() {
+            // colors
+            <?php if(count($colors) > 0) {?>
+                <?php foreach($colors as $color) { ?>
+                    $("#{{ $color['field'] }}").colorpicker();
+                <?php } ?>
+            <?php } ?>
+            // editors
+            <?php if(count($editors) > 0) { ?>                            
                 if(!window.CKEDITOR) {
                     alert('CKEditor not found!');
                 }
@@ -213,7 +225,7 @@
                         <?php } ?>
                     <?php } ?>
                 <?php } ?>
-            });
-        <?php } ?>        
+            <?php } ?>
+        });        
     </script>
 @endsection

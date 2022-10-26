@@ -18,7 +18,7 @@
         <div class="tab-content">
             <div class="tab-pane active" id="tab_{{ $field['field'] }}_default">
                 <div class="form-group">                            
-                    <textarea name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} rows="{{ @$field['rows'] }}" data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}">{{ @$item->{$field['field']} }}</textarea>
+                    <textarea name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'jcrud-frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} rows="{{ @$field['rows'] }}" jcrud-data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}">{{ @$item->{$field['field']} }}</textarea>
                 </div>
             </div>
             <?php                                            
@@ -30,7 +30,7 @@
             @foreach($languages as $language)
                 <div class="tab-pane" id="tab_{{ $field['field'] }}_{{ $language->iso }}">
                     <div class="form-group">                                
-                        <textarea name="{{ $field['field'] }}_{{ $language->iso }}" id="{{ $field['field'] }}_{{ $language->iso }}" class="form-control {{ $field['translationsRequired'] ? 'frm-item-required' : '' }}" {{ $field['translationsRequired'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} rows="{{ @$field['rows'] }}" data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}  ({{ $language->iso }})">{{ @$translations[$language->iso] }}</textarea>
+                        <textarea name="{{ $field['field'] }}_{{ $language->iso }}" id="{{ $field['field'] }}_{{ $language->iso }}" class="form-control {{ $field['translationsRequired'] ? 'jcrud-frm-item-required' : '' }}" {{ $field['translationsRequired'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} rows="{{ @$field['rows'] }}" jcrud-data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}  ({{ $language->iso }})">{{ @$translations[$language->iso] }}</textarea>
                     </div>
                 </div>
             @endforeach                    
@@ -39,6 +39,6 @@
 <?php } else { ?>
     <div class="form-group">
         <label>{{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $field['required'] ? '*' : '' }}</label>
-        <textarea name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} rows="{{ @$field['rows'] }}" data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}">{{ @$item->{$field['field']} }}</textarea>
+        <textarea name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'jcrud-frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} rows="{{ @$field['rows'] }}" jcrud-data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}">{{ @$item->{$field['field']} }}</textarea>
     </div>
 <?php } ?>

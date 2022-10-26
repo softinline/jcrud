@@ -18,7 +18,7 @@
 ?>
 <div class="form-group">
     <label>{{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $field['required'] ? '*' : '' }} ({{ trans('messages.start_writing_something') }})</label>
-    <input type="text" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} value="{{ $value }}" data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}">
+    <input type="text" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'jcrud-frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} value="{{ $value }}" jcrud-data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}">
     <input type="hidden" name="{{ $field['field'] }}_autocomplete" id="{{ $field['field'] }}_autocomplete" value="{{ $hidden }}"/>
     <script>
         $(function() {

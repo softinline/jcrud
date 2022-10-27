@@ -122,6 +122,10 @@
                 if($config['forms'][$form]['redirect'] == 'back') {
                     $redirectBack = true;
                 }
+                else {
+                    $redirectOk = $ajax.str_replace('{id}', $this->_id, $config['forms'][$form]['redirect'] );
+                    $redirectKo = $ajax.str_replace('{id}', $this->_id, $config['forms'][$form]['redirect'] );
+                }
             }
                                     
             // create or update message

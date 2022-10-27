@@ -325,7 +325,7 @@ jcrud = {
                                 }
                             }
                             else if(data.type == 'response') {
-                                $("#element").html = data.html;
+                                $("#"+data.element).html = data.html;
                             }
                             else if(data.type == 'download') {
                                 var $a=$("<a>");

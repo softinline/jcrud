@@ -319,8 +319,21 @@ jcrud = {
                     success: function(data) {                
                         if(data.success) {
                             alerts.show('ok', data.message);
-                            if(data.redirect != '') {
-                                location.href = data.redirect;
+                            if(data.type == 'redirect') {                                
+                                if(data.redirect != '') {
+                                    location.href = data.redirect;
+                                }
+                            }
+                            else if(data.type == 'response') {
+                                $("#element").html = data.html;
+                            }
+                            else if(data.type == 'download') {
+                                var $a=$("<a>");
+                                $a.attr("href",data.data);                          
+                                $("body").append($a);
+                                $a.attr("download",data.file);
+                                $a[0].click();
+                                $a.remove();
                             }
                         }
                         else {

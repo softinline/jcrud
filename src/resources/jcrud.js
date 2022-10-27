@@ -321,11 +321,17 @@ jcrud = {
                             alerts.show('ok', data.message);
                             if(data.type == 'redirect') {                                
                                 if(data.redirect != '') {
-                                    location.href = data.redirect;
+                                    var fullUrl = window.location.origin+"/"+data.redirect;
+                                    if(location.href == fullUrl) {
+                                        location.reload();
+                                    }
+                                    else {
+                                        location.href = data.redirect;
+                                    }                                    
                                 }
                             }
                             else if(data.type == 'response') {
-                                $("#"+data.element).html = data.html;
+                                $("#"+data.element).html(data.html);
                             }
                             else if(data.type == 'download') {
                                 var $a=$("<a>");

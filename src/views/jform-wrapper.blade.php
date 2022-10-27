@@ -28,7 +28,11 @@
                                             {{ $item->{$form['fieldTitle']} }}
                                         <?php } ?>
                                     <?php } else { ?>
-                                        {{ ucfirst(trans('messages.add')) }}
+                                        <?php if(array_key_exists('title', $form)) { ?>
+                                            {{ ucfirst(trans('messages.'.$form['title'])) }}
+                                        <?php } else { ?>
+                                            {{ ucfirst(trans('messages.add')) }}
+                                        <?php } ?>
                                     <?php } ?>
                                 </li>
                             <?php } ?>

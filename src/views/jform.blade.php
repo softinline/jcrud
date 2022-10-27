@@ -25,6 +25,11 @@
         $editors = [];  // array of elements for editorCK
         $colors = [];   // array of elements for color picker
     ?>    
+    <?php if(@$form['headerTemplate']) { ?>
+        @include($form['headerTemplate'], [
+            'item' => @$item
+        ])
+    <?php } ?>
     <div class="row">
         <div class="col-lg-12">
             <ul class="nav nav-tabs">
@@ -162,7 +167,11 @@
             </div>
         </div>
     </div>
-    
+    <?php if(@$form['footerTemplate']) { ?>
+        @include($form['footerTemplate'], [
+            'item' => @$item
+        ])
+    <?php } ?>
     <?php // prepare modal for options post save ?>
     <?php if(array_key_exists('optionsPostSave', $form)) { ?>
         <div class="modal" tabindex="-1" role="dialog" id="modal-options-post-save">

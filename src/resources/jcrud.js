@@ -122,7 +122,7 @@ jcrud = {
             if(elements[i].classList.contains("jcrud-frm-item-required")) {
                 var process = true;
                 // check parent visibility
-                var elementParent = $(elements[i]).closest('.softinline-jcrud-childrens-div');
+                var elementParent = $(elements[i]).closest('.jcrud-childrens-div');
                 if(elementParent.length > 0) {
                     if(!elementParent.is(":visible")) {                        
                         process = false;

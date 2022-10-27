@@ -206,7 +206,7 @@
                 // check if display
                 $display = @$item->{$field['field']} == $children['value'] ? 'block' : 'none'; 
             ?>
-            <div id="div-{{ $field['field'] }}-{{ $children['value'] }}" style="display:{{ $display }}" class="softinline-jcrud-childrens-div">
+            <div id="div-{{ $field['field'] }}-{{ $children['value'] }}" style="display:{{ $display }}" class="jcrud-childrens-div">
                 <?php foreach($children['fields'] as $fieldChildren) { ?>                
                     @include('softinline::fields', [
                         'field' => $fieldChildren,

@@ -14,6 +14,9 @@
     'breadcrumb' => $breadcrumb
 ])
 @section('body')
+    <?php if(@$list['headerTemplate']) { ?>
+        @include($list['headerTemplate'])
+    <?php } ?>
     <?php if(@$list['subLists']) { ?>
         <div class="row">
             <div class="col-lg-12">
@@ -138,6 +141,9 @@
             </div>
         </div>
     </div>
+    <?php if(@$list['footerTemplate']) { ?>
+        @include($list['footerTemplate'])
+    <?php } ?>
 @stop
 @section('script')
     @parent

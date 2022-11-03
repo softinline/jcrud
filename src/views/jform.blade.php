@@ -61,9 +61,9 @@
                         }
                     ?>
                     <?php if($show) { ?>
-                        <div class="tab-pane <?php echo $first ? 'active' : ''; ?>" id="tab_{{ $tab['key'] }}">
-                            <!-- form -->
+                        <div class="tab-pane <?php echo $first ? 'active' : ''; ?>" id="tab_{{ $tab['key'] }}">                            
                             <?php if($tab['type'] == 'form') { ?>
+                                <!-- form -->
                                 <?php
                                     // default values
                                     $frmAction = @$item ? '/'.$config['url'].'/'.$item->id.'/update' : '/'.$config['url'].'/create';
@@ -127,7 +127,7 @@
                                                 <?php } ?>
                                             <?php } ?>
                                         </div>
-                                        <div class="card-footer">                                            
+                                        <div class="card-footer">                                                                                        
                                             <?php if(array_key_exists('optionsPostSave', $form)) { ?>
                                                 <button type="button" name="btn-submit-options-post-save" id="btn-submit-options-post-save" class="btn btn-primary {{ @$config['btnStyles'] }}" onclick="jcrud.submitSelectOptionPostSave()"><i class="loading"></i> {{ ucfirst(trans('messages.accept')) }}</button>
                                             <?php } else { ?>
@@ -150,9 +150,9 @@
                                             <input type="hidden" name="{{ $kParam }}" id="{{ $kParam }}" value="{{ $vParam }}" />
                                         <?php } ?>
                                     <?php } ?>
-                                </form>
-                            <!-- view -->
-                            <?php } elseif($tab['type'] == 'view') { ?>                                
+                                </form>                            
+                            <?php } elseif($tab['type'] == 'view') { ?>
+                                <!-- view -->
                                 @include($tab['view'], [
                                     'config' => $config,
                                     'item' => $item,

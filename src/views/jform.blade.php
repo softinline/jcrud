@@ -16,6 +16,25 @@
         $method = $config['languages'];
         $languages = $controller::$method(@$item);
     }
+
+    // get first tab
+    $tab = null;
+    foreach($form['tabs'] as $tabObj) {
+        if($tab == null) {
+            $tab = $tabObj;
+        }
+    }
+
+    // default values
+    $frmAction = @$item ? '/'.$config['url'].'/'.$item->id.'/update' : '/'.$config['url'].'/create';
+    $frmName = 'frm-'.$config['title'].'-'.$tab['key'];
+    // if has action
+    if(array_key_exists('action', $form)) {
+        $frmAction = $item ? '/'.$config['url'].'/'.$item->id.'/'.$form['action'] : '/'.$config['url'].'/'.$form['action'];
+        $frmName = 'frm-'.$config['title'].'-'.$tab['key'];
+    }
+    $frmName = strtolower($frmName);                                
+
 ?>
 @extends($wrapper, [
     'breadcrumb' => $breadcrumb
@@ -31,140 +50,19 @@
         ])
     <?php } ?>
     <div class="row">
-        <div class="col-lg-12">
-            <ul class="nav nav-tabs">
-                <?php $first = true; ?>
-                <?php foreach($form['tabs'] as $tab) { ?>
-                    <?php
-                        $show = true;
-                        if(array_key_exists('condition', $tab)) {
-                            $method = $tab['condition'];
-                            $show = $controller::$method(@$item);
-                        }
-                    ?>
-                    <?php if($show) { ?>
-                        <li class="nav-item">
-                            <a class="nav-link <?php echo $first ? 'active' : ''; ?>" href="#tab_{{ $tab['key'] }}" data-toggle="tab" aria-expanded="false">{{ ucfirst(trans('messages.'.$tab['title'])) }}</a>
-                        </li>
-                        <?php $first = false; ?>
-                    <?php } ?>
-                <?php } ?>
-            </ul>
-            <div class="tab-content">
-                <?php $first = true; ?>
-                <?php foreach($form['tabs'] as $tab) { ?>                
-                    <?php
-                        $show = true;
-                        if(array_key_exists('condition', $tab)) {
-                            $method = $tab['condition'];
-                            $show = $controller::$method(@$item);
-                        }
-                    ?>
-                    <?php if($show) { ?>
-                        <div class="tab-pane <?php echo $first ? 'active' : ''; ?>" id="tab_{{ $tab['key'] }}">                            
-                            <?php if($tab['type'] == 'form') { ?>
-                                <!-- form -->
-                                <?php
-                                    // default values
-                                    $frmAction = @$item ? '/'.$config['url'].'/'.$item->id.'/update' : '/'.$config['url'].'/create';
-                                    $frmName = 'frm-'.$config['title'].'-'.$tab['key'];
-
-                                    // if has action
-                                    if(array_key_exists('action', $form)) {
-                                        $frmAction = $item ? '/'.$config['url'].'/'.$item->id.'/'.$form['action'] : '/'.$config['url'].'/'.$form['action'];
-                                        $frmName = 'frm-'.$config['title'].'-'.$tab['key'];
-                                    }
-
-                                    $frmName = strtolower($frmName);                                
-                                ?>
-                                <form action="{{ url($frmAction) }}" name="{{ $frmName }}" id="{{ $frmName }}" method="post" enctype="multipart/form-data">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            {{ csrf_field() }}
-                                            <?php foreach($tab['fields'] as $field) { ?>
-                                                <?php 
-                                                    // editor
-                                                    if ($field['type'] == 'editor') {
-                                                        $editors[] = $field;
-                                                    }
-                                                    // color
-                                                    if($field['type'] == 'color') {
-                                                        $colors[] = $field;
-                                                    }
-                                                ?>
-                                                <?php if($field['type'] == 'row') { ?>
-                                                    <div class="row">
-                                                        <?php foreach($field['fields'] as $subfield) { ?>
-                                                            <div class="col-lg-{{ (12 / count($field['fields'])) }}">
-                                                                @include('softinline::fields', [
-                                                                    'field' => $subfield,
-                                                                    'controller' => $controller,
-                                                                    'id' => $id,
-                                                                    'config' => $config,
-                                                                ])
-                                                            </div>
-                                                        <?php } ?>
-                                                    </div>
-                                                <?php } elseif($field['type'] == 'fieldset') { ?>
-                                                    <fieldset>
-                                                        <legend>{{ $field['title'] }}</legend>
-                                                        <?php foreach($field['fields'] as $subfield) { ?>
-                                                            @include('softinline::fields', [
-                                                                'field' => $subfield,
-                                                                'controller' => $controller,
-                                                                'id' => $id,
-                                                                'config' => $config,
-                                                            ])
-                                                        <?php } ?>
-                                                    </fieldset>
-                                                <?php } else { ?>
-                                                    @include('softinline::fields', [
-                                                        'field' => $field,
-                                                        'controller' => $controller,
-                                                        'id' => $id,
-                                                        'config' => $config,
-                                                    ])
-                                                <?php } ?>
-                                            <?php } ?>
-                                        </div>
-                                        <div class="card-footer">                                                                                        
-                                            <?php if(array_key_exists('optionsPostSave', $form)) { ?>
-                                                <button type="button" name="btn-submit-options-post-save" id="btn-submit-options-post-save" class="btn btn-primary {{ @$config['btnStyles'] }}" onclick="jcrud.submitSelectOptionPostSave()"><i class="loading"></i> {{ ucfirst(trans('messages.accept')) }}</button>
-                                            <?php } else { ?>
-                                                <button type="button" name="btn-submit" id="btn-submit" class="btn btn-primary {{ @$config['btnStyles'] }}" onclick="jcrud.submit('{{ $frmName }}')"><i class="loading"></i> {{ ucfirst(trans('messages.accept')) }}</button>
-                                            <?php } ?>
-                                            <?php foreach($tab['extraButtons'] as $extraButton) { ?>
-                                                <button type="button" class="btn btn-primary {{ @$config['btnStyles'] }}" onclick="{{ $extraButton[1] }}('{{ @$item->id }}')"> {{ ucfirst(trans('messages.'.$extraButton[0])) }}</button>
-                                            <?php } ?>
-                                            <a href="{{ url($ajax.$config['url'].$query) }}" class="btn btn-secondary {{ @$config['btnStyles'] }}"> {{ ucfirst(trans('messages.cancel')) }}</a>
-                                        </div>
-                                    </div>
-                                    <input type="hidden" name="tab" id="tab" value="{{ $tab['key'] }}" />                                
-                                    <input type="hidden" name="optionsPostSave" id="optionsPostSave" value="" />
-                                    <?php
-                                        $params = \Request::all();
-                                        $counter = count($params);
-                                    ?>
-                                    <?php if($counter > 0) { ?>
-                                        <?php foreach($params as $kParam => $vParam) { ?>
-                                            <input type="hidden" name="{{ $kParam }}" id="{{ $kParam }}" value="{{ $vParam }}" />
-                                        <?php } ?>
-                                    <?php } ?>
-                                </form>                            
-                            <?php } elseif($tab['type'] == 'view') { ?>
-                                <!-- view -->
-                                @include($tab['view'], [
-                                    'config' => $config,
-                                    'item' => $item,
-                                    'colKey' => $tab['key'],
-                                    'config' => $config,
-                                ])                                
-                            <?php } ?>                          
-                        </div>
-                        <?php $first = false; ?>
-                    <?php } ?>
-                <?php } ?>
-            </div>
+        <div class="col-lg-12">            
+            <?php if(count($form['tabs']) > 1) { ?>                
+                @include('softinline::jform-tabs', [
+                    'form' => $form,
+                    'item' => @$item,
+                ])
+            <?php } else { ?>                
+                @include('softinline::jform-content', [
+                    'form' => $form,
+                    'tab' => $tab,
+                    'item' => @$item,
+                ])
+            <?php } ?>            
         </div>
     </div>
     <?php if(@$form['footerTemplate']) { ?>

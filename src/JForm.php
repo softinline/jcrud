@@ -147,8 +147,20 @@
                                                   
                     // execute
                     $result = $this->_controller::$method($this->_item, $this->_id);
-                                                                                
-                    if($result) {
+
+                    // default response info
+                    $successStatus = $result;
+                    $successMessageOk = ucfirst(trans('messages.'.$msg.'_ok'));
+                    $successMessageKo = ucfirst(trans('messages.'.$msg.'_error'));
+
+                    // is response is array override with other data
+                    if(is_array($result)) {
+                        $successStatus = $result['success'];
+                        $successMessageOk = $result['message'];
+                        $successMessageKo = $result['message'];
+                    }
+                                                          
+                    if($successStatus) {
 
                         // after execute method check if redirectOk must be changed
                         if(array_key_exists('optionsPostSave', $config['forms'][$form])) {
@@ -163,7 +175,7 @@
 
                             return \Response::json([
                                 'success' => true,
-                                'message' => ucfirst(trans('messages.'.$msg.'_ok')),
+                                'message' => $successMessageOk,
                                 'type' => 'redirect',
                                 'redirect' => $redirectOk,
                             ], 200);
@@ -171,7 +183,7 @@
                         }
                         else {
 
-                            \Session::flash('message_success', ucfirst(trans('messages.'.$msg.'_ok')));
+                            \Session::flash('message_success', $successMessageOk);
 
                             if($redirectBack) {
 
@@ -195,14 +207,14 @@
 
                             return \Response::json([
                                 'success' => false,
-                                'message' => ucfirst(trans('messages.'.$msg.'_error')),
+                                'message' => $successMessageKo,
                             ], 200);
 
                         }
                         else {
 
-                            \Session::flash('message_error', ucfirst(trans('messages.'.$msg.'_error')));
-                                                  
+                            \Session::flash('message_error', $successMessageKo);
+                                                
                             if($redirectBack) {
 
                                 return \Redirect::back()
@@ -519,7 +531,7 @@
          * toggle enable
          */
         public function toggleEnable($config, $method) {
-
+            
             // ajax request
             $ajax = '';
             if(array_key_exists('ajax', $config)) {
@@ -534,23 +546,50 @@
 
                 // call method in class child
                 $response = $this->_controller::$method($this->_item);
-                
-                if($response) {
-                    
-                    return \Response::json([
-                        'success' => true,
-                        'message' => ucfirst(trans('messages.updated_ok')),
-                        'type' => 'redirect',
-                        'redirect' => $config['url'],
-                    ], 200);
+
+                // if the response isnt array
+                if(!is_array($response)) {
+
+                    if($response) {
+                                                                        
+                        return \Response::json([
+                            'success' => true,
+                            'message' => ucfirst(trans('messages.updated_ok')),
+                            'type' => 'redirect',
+                            'redirect' => $config['url'],
+                        ], 200);
+
+                    }
+                    else {
+                        
+                        return \Response::json([
+                            'success' => false,
+                            'message' => ucfirst(trans('messages.updated_error')),
+                        ], 200);
+                        
+                    }
 
                 }
                 else {
 
-                    return \Response::json([
-                        'success' => false,
-                        'message' => ucfirst(trans('messages.updated_error')),
-                    ], 200);
+                    if($response['success']) {
+                    
+                        return \Response::json([
+                            'success' => true,
+                            'message' => $response['message'],
+                            'type' => 'redirect',
+                            'redirect' => $config['url'],
+                        ], 200);
+
+                    }
+                    else {
+
+                        return \Response::json([
+                            'success' => false,
+                            'message' => $response['message'],
+                        ], 200);
+
+                    }
 
                 }
 

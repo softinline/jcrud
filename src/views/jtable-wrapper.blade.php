@@ -15,7 +15,7 @@
                                 <?php echo $breadcrumb; ?>
                             <?php } else { ?>
                                 <li class="breadcrumb-item">
-                                    <a href="{{ url('/') }}">Dashboard</a>
+                                    <a href="{{ url('/') }}">{{ ucfirst(trans('messages.dashboard')) }}</a>
                                 </li>
                                 <?php if(array_key_exists('url_parent', $config)) { ?>
                                     <li class="breadcrumb-item">

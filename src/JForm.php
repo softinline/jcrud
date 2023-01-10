@@ -364,9 +364,31 @@
                 try {
 
                     // call to method
-                    $result = $this->_controller::$method($this->_item);
+                    $response = $this->_controller::$method($this->_item);
 
-                    if($result) {
+                    $success = false;
+
+                    // if the response isnt array
+                    if(!is_array($response)) {
+
+                        if($response) {
+                            $success = true;
+                            $msg = ucfirst(trans('messages.deleted_ok'));
+                        }
+                        else {
+                            $success = false;
+                            $msg = ucfirst(trans('messages.deleted_ko'));
+                        }
+
+                    }
+                    else {
+
+                        $success = $response['success'];
+                        $msg = $response['message'];
+
+                    }
+
+                    if($success) {
 
                         \DB::commit();
 
@@ -374,7 +396,7 @@
 
                             return \Response::json([
                                 'success' => true,
-                                'message' => ucfirst(trans('messages.deleted_ok')),
+                                'message' => $msg,
                                 'type' => 'redirect',
                                 'redirect' => $config['url'],
                             ], 200);
@@ -382,8 +404,7 @@
                         }
                         else {
 
-                            \Session::flash('flash_message', ucfirst(trans('messages.deleted_ok')));
-
+                            \Session::flash('flash_message', $msg);
                             return \Redirect::to($config['url']);
 
                         }
@@ -394,7 +415,7 @@
 
                             return \Response::json([
                                 'success' => false,
-                                'message' => ucfirst(trans('messages.deleted_error')),
+                                'message' => $msg,
                             ], 200);
 
                         }
@@ -402,10 +423,11 @@
 
                             return \Redirect::to($config['url'])
                                 ->withInput()
-                                ->with('message', ucfirst(trans('messages.deleted_error')));
+                                ->with('message', $msg);
 
                         }
                     }
+                    
                 }
                 // catch error
                 catch(\Exception $e) {

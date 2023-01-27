@@ -112,22 +112,30 @@
             // replace dynamic {id} with id
             $config['url'] = $ajax.str_replace('{id}', $this->_id, $config['url']);
             
-            // redirects url                                            
-            $redirectOk = $config['url'];
-            $redirectKo = $config['url'];
+            // redirects url defailt
+            $redirectOk = $config['url'].'#tab_'.\Request::get('tab');
+            $redirectKo = $config['url'].'#tab_'.\Request::get('tab');
 
-            // set if redirects to back
-            $redirectBack = false;
-            if(array_key_exists('redirect', $config['forms'][$form])) {
-                if($config['forms'][$form]['redirect'] == 'back') {
-                    $redirectBack = true;
+            // override redirectKo
+            if(array_key_exists('redirectKo', $config['forms'][$form])) {
+                if($config['forms'][$form]['redirectKo'] == 'back') {                                        
+                    $redirectKo = url()->previous().'#tab_'.\Request::get('tab');
                 }
-                else {
-                    $redirectOk = $ajax.str_replace('{id}', $this->_id, $config['forms'][$form]['redirect'] );
-                    $redirectKo = $ajax.str_replace('{id}', $this->_id, $config['forms'][$form]['redirect'] );
-                }
+                else {                    
+                    $redirectKo = $ajax.str_replace('{id}', $this->_id, $config['forms'][$form]['redirectKo'] ).'#'.\Request::get('tab');
+                }                
             }
-                                    
+
+            // override redirectOk
+            if(array_key_exists('redirectOk', $config['forms'][$form])) {
+                if($config['forms'][$form]['redirectOk'] == 'back') {                                        
+                    $redirectOk = url()->previous().'#tab_'.\Request::get('tab');
+                }
+                else {                    
+                    $redirectOk = $ajax.str_replace('{id}', $this->_id, $config['forms'][$form]['redirectOk'] ).'#'.\Request::get('tab');
+                }                
+            }
+                                                
             // create or update message
             $msg = is_null($id) ? 'created' : 'updated';
                                     
@@ -139,7 +147,7 @@
                 \DB::beginTransaction();
 
                 try {
-
+                    
                     // set custom action method instead create or update
                     if(array_key_exists('action', $config['forms'])) {
                         $method = '_'.$config['forms']['action'];                            
@@ -185,17 +193,8 @@
 
                             \Session::flash('message_success', $successMessageOk);
 
-                            if($redirectBack) {
+                            return \Redirect::to($redirectOk);
 
-                                return \Redirect::back();
-
-                            }
-                            else {  
-
-                                return \Redirect::to($redirectOk);
-
-                            }
-                                                            
                         }
             
                     }
@@ -215,19 +214,9 @@
 
                             \Session::flash('message_error', $successMessageKo);
                                                 
-                            if($redirectBack) {
+                            return \Redirect::to($redirectKo)
+                                ->withInput();
 
-                                return \Redirect::back()
-                                    ->withInput();
-
-                            }
-                            else {
-
-                                return \Redirect::to($redirectKo)
-                                    ->withInput();
-
-                            }
-                            
                         }
 
                     }              
@@ -252,18 +241,8 @@
 
                         \Session::flash('message_error', ucfirst(trans('messages.'.$msg.'_error')));
                         
-                        if($redirectBack) {
-                            
-                            return \Redirect::back()
-                                ->withInput();
-                                
-                        }
-                        else  {
-
-                            return \Redirect::to($redirectKo)
-                                ->withInput();
-
-                        }
+                        return \Redirect::to($redirectKo)
+                            ->withInput();
 
                     }
 

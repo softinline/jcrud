@@ -213,6 +213,7 @@
                         'controller' => $controller,
                         'config' => $config,
                         'id' => $id,
+                        'fromParent' => true,
                     ])
                 <?php } ?>
             </div>

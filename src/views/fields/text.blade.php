@@ -1,10 +1,24 @@
+<?php 
+    $requiredInfo = false;
+    $requiredClass = false;
+    
+    if($field['required']) {
+        $requiredInfo = true;
+        $requiredClass = true;
+    }
+
+    // if comes from parent field, disable validation from JS
+    if(@$fromParent) {
+        $requiredClass = false;
+    }
+?>
 <?php if(@$field['translate']) { ?>
     <div class="form-group">
-        <label>{{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $field['required'] ? '*' : '' }}</label>
+        <label>{{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $requiredInfo ? '*' : '' }}</label>
         <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" href="#tab_{{ $field['field'] }}_default" data-toggle="tab" aria-expanded="false" id="li-text-area">                
-                    Default {{ $field['required'] ? '*' : '' }}
+                    Default {{ $requiredInfo ? '*' : '' }}
                 </a>
             </li>
             @foreach($languages as $language)
@@ -18,7 +32,7 @@
         <div class="tab-content">
             <div class="tab-pane active" id="tab_{{ $field['field'] }}_default">
                 <div class="form-group">
-                    <input type="text" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'jcrud-frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} value="{{ @$item->{$field['field']} }}" jcrud-data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}">
+                    <input type="text" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $requiredClass ? 'jcrud-frm-item-required' : '' }}" {{ $fieldClass ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} value="{{ @$item->{$field['field']} }}" jcrud-data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}">
                 </div>
             </div>
             <?php                                            
@@ -38,7 +52,7 @@
     </div>
 <?php } else { ?>
     <div class="form-group">
-        <label>{{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $field['required'] ? '*' : '' }}</label>
-        <input type="text" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $field['required'] ? 'jcrud-frm-item-required' : '' }}" {{ $field['required'] ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} value="{{ @$item->{$field['field']} }}" jcrud-data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}">
+        <label>{{ ucfirst(trans('messages.'.$field['title'])) }}: {{ $requiredInfo ? '*' : '' }}</label>
+        <input type="text" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $requiredClass ? 'jcrud-frm-item-required' : '' }}" {{ $requiredClass ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} value="{{ @$item->{$field['field']} }}" jcrud-data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}">
     </div>
 <?php } ?>

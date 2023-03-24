@@ -12,6 +12,12 @@
         }
 
         $frmName = strtolower($frmName);                                
+
+        $defaultButtons = true;
+        if(array_key_exists('defaultButtons', $form)) {
+            $defaultButtons = $form['defaultButtons'];
+        }
+        //echo 'Default buttons -> ['.$defaultButtons.']'; die();
     ?>
     <form action="{{ url($frmAction) }}" name="{{ $frmName }}" id="{{ $frmName }}" method="post" enctype="multipart/form-data">
         <div class="card">
@@ -63,17 +69,21 @@
                     <?php } ?>
                 <?php } ?>
             </div>
-            <div class="card-footer">                                                                                        
+            <div class="card-footer">
                 <?php if(array_key_exists('optionsPostSave', $form)) { ?>
                     <button type="button" name="btn-submit-options-post-save" id="btn-submit-options-post-save" class="btn btn-primary {{ @$config['btnStyles'] }}" onclick="jcrud.submitSelectOptionPostSave()"><i class="loading"></i> {{ ucfirst(trans('messages.accept')) }}</button>
                     <input type="hidden" name="optionsPostSave" id="optionsPostSave" value="" />
                 <?php } else { ?>
-                    <button type="button" name="btn-submit" id="btn-submit-{{ $tab['key'] }}" class="btn btn-primary {{ @$config['btnStyles'] }}" onclick="jcrud.submit('{{ $frmName }}')"><i class="loading"></i> {{ ucfirst(trans('messages.accept')) }}</button>
+                    <?php if($defaultButtons) { ?>
+                        <button type="button" name="btn-submit" id="btn-submit-{{ $tab['key'] }}" class="btn btn-primary {{ @$config['btnStyles'] }}" onclick="jcrud.submit('{{ $frmName }}')"><i class="loading"></i> {{ ucfirst(trans('messages.accept')) }}</button>
+                    <?php } ?>
                 <?php } ?>
                 <?php foreach($tab['extraButtons'] as $extraButton) { ?>
                     <button type="button" class="btn btn-primary {{ @$config['btnStyles'] }}" onclick="{{ $extraButton[1] }}('{{ @$item->id }}')"> {{ ucfirst(trans('messages.'.$extraButton[0])) }}</button>
                 <?php } ?>
-                <a href="{{ url($ajax.$config['url'].$query) }}" class="btn btn-secondary {{ @$config['btnStyles'] }}"> {{ ucfirst(trans('messages.cancel')) }}</a>
+                <?php if($defaultButtons) { ?>
+                    <a href="{{ url($ajax.$config['url'].$query) }}" class="btn btn-secondary {{ @$config['btnStyles'] }}"> {{ ucfirst(trans('messages.cancel')) }}</a> 
+                <?php } ?>
             </div>
         </div>
         <input type="hidden" name="tab" value="{{ $tab['key'] }}" />                                        

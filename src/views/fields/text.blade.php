@@ -32,7 +32,7 @@
         <div class="tab-content">
             <div class="tab-pane active" id="tab_{{ $field['field'] }}_default">
                 <div class="form-group">
-                    <input type="text" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $requiredClass ? 'jcrud-frm-item-required' : '' }}" {{ $fieldClass ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} value="{{ @$item->{$field['field']} }}" jcrud-data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}">
+                    <input type="text" name="{{ $field['field'] }}" id="{{ $field['field'] }}" class="form-control {{ $requiredClass ? 'jcrud-frm-item-required' : '' }}" {{ $requiredClass ? 'required' : '' }} {{ @$field['disabled'] ? 'disabled' : '' }} value="{{ @$item->{$field['field']} }}" jcrud-data-title="{{ ucfirst(trans('messages.'.$field['title'])) }}">
                 </div>
             </div>
             <?php                                            

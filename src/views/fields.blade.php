@@ -46,6 +46,14 @@
             'config' => $config
         ])
     <?php } ?>
+    <?php if($field['type'] == 'time') { ?>
+        <!-- time -->
+        @include('softinline::fields.time', [
+            'item' => @$item,
+            'field' => $field,
+            'config' => $config
+        ])
+    <?php } ?>
     <?php if($field['type'] == 'text') { ?>        
         <!-- text -->
         @include('softinline::fields.text', [

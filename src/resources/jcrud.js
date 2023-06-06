@@ -85,6 +85,52 @@ jcrud = {
 
         });
 
+        // datepicker
+        $(document).on('focus', ".date-picker", function() {
+            $(this).datepicker({
+                dateFormat: 'dd/mm/yy',
+                showAnim: 'fadeIn'
+            });
+        });
+
+        // datetimepicker
+        $(document).on('focus', ".datetime-picker", function() {
+            $(this).datetimepicker({
+                "allowInputToggle": true,
+                "showClose": true,
+                "showClear": true,
+                "showTodayButton": true,
+                "format": "MM/DD/YYYY HH:mm:ss",
+                "locale":"es",
+                "icons": {
+                    "time": "fa fa-clock",
+                    "date": "fa fa-calendar",
+                    "up": "fa fa-arrow-up",
+                    "down": "fa fa-arrow-down",
+                    "today":"fa fa-calendar-check"
+                }            
+            });
+        });
+
+        // timepicker
+        $(document).on('focus', ".time-picker", function() {
+            $(this).datetimepicker({
+                "allowInputToggle": true,
+                "showClose": true,
+                "showClear": true,
+                "showTodayButton": true,
+                "format": "HH:mm:ss",
+                "locale":"es",
+                "icons": {
+                    "time": "fa fa-clock",
+                    "date": "fa fa-calendar",
+                    "up": "fa fa-arrow-up",
+                    "down": "fa fa-arrow-down",
+                    "today":"fa fa-calendar-check"
+                }
+            });
+        });
+
         // capture delete click event on row
         $(document).on('change', '.jcrud-toggle-enabled',  function() {
             jcrud.toggleEnable($(this));

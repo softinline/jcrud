@@ -181,6 +181,9 @@
                 "ajax": "<?php echo $data; ?>",
                 "order": [[ {{ $orderCol }}, "{{ $orderType }}" ]],                
                 "pageLength": {{ @$list['pageLength'] != '' ? $list['pageLength'] : 10}},
+                <?php if(isset($list['aLengthMenu'])) { ?>
+                    "aLengthMenu": {!! $list['aLengthMenu'] !!}, // [[1, 10, 25, 500, -1], [1, 10, 25, 500, "All"]]
+                <?php } ?>
                 "columns": [
                     <?php if($list['actions']['selector']) { ?>
                         { width:"1%", data:"selector", name:"selector", orderable:false, searchable:false },

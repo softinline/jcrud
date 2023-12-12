@@ -13,11 +13,16 @@ class JCrudServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // load views
         $this->loadViewsFrom(__DIR__.'/views', 'softinline');
+        
+        // load routes
+        $this->loadRoutesFrom(__DIR__.'/routes/web.php');
+
         $this->publishes([
             __DIR__.'/views' => base_path('resources/views/vendor/softinline/jcrud'),
         ]);
+        
         $this->publishes([
             __DIR__.'/resources' => public_path('vendor/softinline'),
         ], 'public');

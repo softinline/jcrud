@@ -428,5 +428,25 @@ jcrud = {
         else {
             return uri + separator + key + "=" + value;
         }
-    }
+    },
+    datatableConfigColumnsSave: function(frm) {        
+        var data = new FormData(document.getElementById(frm));
+        data.append('sortable', $("#sortable").sortable("toArray"));        
+        $.ajax({
+            method: "post",
+            url: '/jcrud/datatable/config-columns-save',
+            data: data,
+            contentType: false,
+            cache: false,
+            processData:false,
+            success: function(response) {
+                location.reload();
+            },
+            error: function (xhr, ajaxOptions, thrownError) { 
+                alert('Error');
+            },
+            complete: function() {                
+            }    
+        });      
+    },
 }

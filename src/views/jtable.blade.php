@@ -137,19 +137,27 @@
                     <div class="modal-body">
                         <form id="sfwcomponent-form-datatable-config-columns-{{ $name }}" name="sfwcomponent-form-datatable-config-columns-{{ $name }}">                            
                             <ul id="sortable">                                                            
-                                <?php foreach($list['cols'] as $column) { ?>
+                                <?php foreach($list['cols'] as $col) { ?>
                                     <?php
                                         // defult false is not show
                                         $default = true;
-                                        if(array_key_exists('default', $column)) {
-                                            $default = $column['default'];
+                                        if(array_key_exists('default', $col)) {
+                                            $default = $col['default'];
+                                        }
+                                        // title                                               
+                                        $title = $col['field'];
+                                        if(array_key_exists('title', $col)) {
+                                            $title = $col['title'];
+                                        }
+                                        if($title != '') {
+                                            $title = ucfirst(trans('messages.'.$title));
                                         }
                                     ?>
-                                    <li class="ui-state-default" id="{{ $column['field'] }}">
+                                    <li class="ui-state-default" id="{{ $col['field'] }}">
                                         <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
-                                        <input type="checkbox" id="check-{{ $column['field'] }}" name="check-{{ $column['field'] }}" value="1" <?php echo $default ? 'checked' : ''; ?>> {{ $column['field'] }}
+                                        <input type="checkbox" id="check-{{ $col['field'] }}" name="check-{{ $col['field'] }}" value="1" <?php echo $default ? 'checked' : ''; ?>> {{ $title }}
                                     </li>                                                                        
-                                    <input type="hidden" name="json-{{ $column['field'] }}" id="json-{{ $column['field'] }}" value="<?php echo htmlspecialchars(json_encode($column), ENT_QUOTES, 'UTF-8'); ?>" />
+                                    <input type="hidden" name="json-{{ $col['field'] }}" id="json-{{ $col['field'] }}" value="<?php echo htmlspecialchars(json_encode($column), ENT_QUOTES, 'UTF-8'); ?>" />
                                 <?php } ?>
                             </ul>                            
                             <input type="hidden" name="name" id="name" value="{{ $name }}" />

@@ -503,7 +503,7 @@
             $sheet = $spreadsheet->getActiveSheet();
 
             // call method in class child
-            $sheet = $this->_controller::$method($sheet);
+            $sheet = $this->_controller::$method($config, $sheet);
 
             // create writer
             $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);

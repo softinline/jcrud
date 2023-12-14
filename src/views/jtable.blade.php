@@ -157,7 +157,7 @@
                                         <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
                                         <input type="checkbox" id="check-{{ $col['field'] }}" name="check-{{ $col['field'] }}" value="1" <?php echo $default ? 'checked' : ''; ?>> {{ $title }}
                                     </li>                                                                        
-                                    <input type="hidden" name="json-{{ $col['field'] }}" id="json-{{ $col['field'] }}" value="<?php echo htmlspecialchars(json_encode($column), ENT_QUOTES, 'UTF-8'); ?>" />
+                                    <input type="hidden" name="json-{{ $col['field'] }}" id="json-{{ $col['field'] }}" value="<?php echo htmlspecialchars(json_encode($col), ENT_QUOTES, 'UTF-8'); ?>" />
                                 <?php } ?>
                             </ul>                            
                             <input type="hidden" name="name" id="name" value="{{ $name }}" />

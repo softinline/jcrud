@@ -121,6 +121,15 @@
             'languages' => $languages
         ])
     <?php } ?>
+    <?php if($field['type'] == 'select2') { ?>
+        <!-- select2 -->
+        @include('softinline::fields.select2', [
+            'item' => @$item,
+            'field' => $field,
+            'config' => $config,
+            'languages' => $languages
+        ])
+    <?php } ?>
     <?php if($field['type'] == 'select-popup') { ?>
         <!-- select popup -->
         @include('softinline::fields.select-popup', [
